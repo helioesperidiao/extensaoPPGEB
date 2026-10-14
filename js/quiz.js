@@ -4,7 +4,7 @@ function loadQuestion() {
   console.log('[DEBUG] loadQuestion — currentIndex:', Estado.currentIndex);
 
   Estado.answered = false;
-  Estado.selectedIndex = null;
+  Estado.selectedIndexes = [];
 
   if (!Estado.quizData || !Estado.quizData.questions[Estado.currentIndex]) {
     console.error('[ERRO] quizData inválido');
@@ -12,12 +12,18 @@ function loadQuestion() {
   }
 
   const q = Estado.quizData.questions[Estado.currentIndex];
+  const multi = isMultiResposta(q);
 
   if (DOM.questionText) {
     DOM.questionText.textContent = q.question;
     DOM.questionText.style.animation = 'none';
     void DOM.questionText.offsetWidth;
     DOM.questionText.style.animation = '';
+  }
+
+  // Mostra/esconde aviso de múltipla resposta
+  if (DOM.multiHint) {
+    DOM.multiHint.classList.toggle('hidden', !multi);
   }
 
   if (DOM.options) {
@@ -62,17 +68,33 @@ function selectOption(index, btn) {
   btn.classList.add('rippling');
   setTimeout(() => btn.classList.remove('rippling'), 600);
 
-  document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
-  btn.classList.add('selected');
-  Estado.selectedIndex = index;
+  const q = Estado.quizData.questions[Estado.currentIndex];
+  const multi = isMultiResposta(q);
 
-  somClique();
-
-  const textoAlternativa = Estado.quizData.questions[Estado.currentIndex].options[index];
-  falar(textoAlternativa);
+  if (multi) {
+    // TOGGLE: adiciona/remove da lista de selecionadas
+    const pos = Estado.selectedIndexes.indexOf(index);
+    if (pos >= 0) {
+      Estado.selectedIndexes.splice(pos, 1);
+      btn.classList.remove('selected');
+      somClique();
+    } else {
+      Estado.selectedIndexes.push(index);
+      btn.classList.add('selected');
+      somClique();
+      falar(q.options[index]);
+    }
+  } else {
+    // ÚNICA: substitui seleção
+    document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+    btn.classList.add('selected');
+    Estado.selectedIndexes = [index];
+    somClique();
+    falar(q.options[index]);
+  }
 
   if (DOM.confirmBtn) {
-    DOM.confirmBtn.disabled = false;
+    DOM.confirmBtn.disabled = Estado.selectedIndexes.length === 0;
     DOM.confirmBtn.style.display = 'block';
   }
 }
@@ -86,20 +108,22 @@ function confirmarResposta() {
     return;
   }
 
-  if (Estado.answered || Estado.selectedIndex === null || !Estado.quizData) return;
+  if (Estado.answered || Estado.selectedIndexes.length === 0 || !Estado.quizData) return;
 
   Estado.answered = true;
   pararTimer();
   speechSynthesis.cancel();
 
   const q = Estado.quizData.questions[Estado.currentIndex];
+  const corretos = getCorrectIndexes(q);
   const allOptions = document.querySelectorAll('.option');
-  const btnClicado = allOptions[Estado.selectedIndex];
 
+  // Ponto visual de referência: primeira opção marcada (para partículas)
   let cx = window.innerWidth / 2;
   let cy = window.innerHeight / 2;
-  if (btnClicado) {
-    const rect = btnClicado.getBoundingClientRect();
+  const primeiroMarcado = allOptions[Estado.selectedIndexes[0]];
+  if (primeiroMarcado) {
+    const rect = primeiroMarcado.getBoundingClientRect();
     cx = rect.left + rect.width / 2;
     cy = rect.top + rect.height / 2;
   }
@@ -109,13 +133,17 @@ function confirmarResposta() {
     o.classList.remove('selected');
   });
 
-  const acertou = Estado.selectedIndex === q.correct;
+  const acertou = conjuntosIguais(Estado.selectedIndexes, corretos);
+
+  // Marca TODAS as corretas em verde (independente de acerto/erro)
+  corretos.forEach(i => {
+    if (!allOptions[i]) return;
+    allOptions[i].classList.add('correct');
+    allOptions[i].querySelector('span')
+      .insertAdjacentHTML('afterend', '<span class="icon">✔</span>');
+  });
 
   if (acertou) {
-    allOptions[q.correct].classList.add('correct');
-    allOptions[q.correct].querySelector('span')
-      .insertAdjacentHTML('afterend', '<span class="icon">✔</span>');
-
     Estado.combo++;
     Estado.score++;
 
@@ -142,13 +170,14 @@ function confirmarResposta() {
   } else {
     Estado.combo = 0;
 
-    allOptions[q.correct].classList.add('correct');
-    allOptions[q.correct].querySelector('span')
-      .insertAdjacentHTML('afterend', '<span class="icon">✔</span>');
-
-    allOptions[Estado.selectedIndex].classList.add('wrong');
-    allOptions[Estado.selectedIndex].querySelector('span')
-      .insertAdjacentHTML('afterend', '<span class="icon">✖</span>');
+    // Marca em vermelho apenas as erradas que o usuário escolheu
+    Estado.selectedIndexes.forEach(i => {
+      if (corretos.includes(i)) return;
+      if (!allOptions[i]) return;
+      allOptions[i].classList.add('wrong');
+      allOptions[i].querySelector('span')
+        .insertAdjacentHTML('afterend', '<span class="icon">✖</span>');
+    });
 
     somErro();
     screenFlash('red');
@@ -157,9 +186,10 @@ function confirmarResposta() {
     explodirParticulas(cx, cy, 15, ['#96100E', '#d4181a', '#D66C25']);
   }
 
+  const listaCorretas = corretos.map(i => q.options[i]).join('; ');
   const msg = acertou
     ? 'Resposta correta! Parabéns!'
-    : `Resposta incorreta. A resposta correta é: ${q.options[q.correct]}`;
+    : `Resposta incorreta. As respostas corretas são: ${listaCorretas}`;
   setTimeout(() => falar(msg), acertou ? 500 : 400);
 
   if (DOM.progressFill) {
@@ -202,6 +232,7 @@ function showResult() {
   pararTimer();
   if (DOM.quizContent) DOM.quizContent.classList.add('hidden');
   if (DOM.resultScreen) DOM.resultScreen.classList.remove('hidden');
+  if (DOM.multiHint) DOM.multiHint.classList.add('hidden');
 
   const total = Estado.quizData.questions.length;
   const percent = (Estado.score / total) * 100;
@@ -256,7 +287,7 @@ function reiniciarQuiz() {
   Estado.score = 0;
   Estado.combo = 0;
   Estado.answered = false;
-  Estado.selectedIndex = null;
+  Estado.selectedIndexes = [];
 
   if (DOM.scoreBadge) DOM.scoreBadge.textContent = '⭐ 0 pts';
   if (DOM.progressFill) DOM.progressFill.style.width = '0%';
@@ -306,7 +337,10 @@ function configurarEventosQuiz() {
       }
 
       const q = Estado.quizData.questions[Estado.currentIndex];
-      let texto = `Pergunta ${Estado.currentIndex + 1}. ${q.question}. As alternativas são: `;
+      const multi = isMultiResposta(q);
+      let texto = `Pergunta ${Estado.currentIndex + 1}. ${q.question}. `;
+      if (multi) texto += 'Atenção: esta pergunta tem mais de uma resposta correta. ';
+      texto += 'As alternativas são: ';
       q.options.forEach((opt, i) => { texto += `Alternativa ${i + 1}: ${opt}. `; });
 
       const utter = falar(texto, { onend: () => DOM.speakBtn.classList.remove('speaking') });

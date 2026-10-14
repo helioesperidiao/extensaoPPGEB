@@ -70,6 +70,7 @@ function tempoEsgotado() {
   tremeContainer();
 
   const q = Estado.quizData.questions[Estado.currentIndex];
+  const corretos = getCorrectIndexes(q);
   const allOptions = document.querySelectorAll('.option');
 
   allOptions.forEach(o => {
@@ -77,12 +78,17 @@ function tempoEsgotado() {
     o.classList.remove('selected');
   });
 
-  allOptions[q.correct].classList.add('correct');
-  allOptions[q.correct].querySelector('span')
-    .insertAdjacentHTML('afterend', '<span class="icon">✔</span>');
+  // Marca todas as corretas
+  corretos.forEach(i => {
+    if (!allOptions[i]) return;
+    allOptions[i].classList.add('correct');
+    allOptions[i].querySelector('span')
+      .insertAdjacentHTML('afterend', '<span class="icon">✔</span>');
+  });
 
+  const listaCorretas = corretos.map(i => q.options[i]).join('; ');
   setTimeout(() => {
-    falar(`Tempo esgotado! A resposta correta é: ${q.options[q.correct]}`);
+    falar(`Tempo esgotado! As respostas corretas são: ${listaCorretas}`);
   }, 400);
 
   if (DOM.progressFill) {

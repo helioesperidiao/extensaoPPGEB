@@ -51,7 +51,7 @@
       "correct": 0
     },
     {
-      "question": "Como posso evitar de pegar doenças dos meus cachorros e gatos?",
+      "question": "Como posso evitar de pegar doenças dos meus cachorros e gatos? (Marque TODAS as corretas)",
       "options": [
         "Recolhendo o cocô do chão diariamente",
         "Vermifugando meu cachorro e meu gato",
@@ -59,7 +59,7 @@
         "Bebendo água tratada",
         "Doando meus animaizinhos e ficando longe de qualquer tipo de bicho"
       ],
-      "correct": 0
+      "correct": [0, 1, 2, 3]
     },
     {
       "question": "Preciso doar todos os meus animais para ficar seguro?",

@@ -4,10 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
   <title>Quiz Interativo 🎉</title>
-  <link rel="stylesheet" href="style.css?v=5">
+
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/quiz.css">
+  <link rel="stylesheet" href="css/timer.css">
+  <link rel="stylesheet" href="css/modais.css">
+  <link rel="stylesheet" href="css/efeitos.css">
+  <link rel="stylesheet" href="css/responsivo.css">
 </head>
 <body>
 
@@ -41,6 +46,11 @@
             <div class="question-text" id="questionText"></div>
             <button class="speak-btn" id="speakBtn" title="Ouvir pergunta">🔊</button>
           </div>
+
+          <div id="multiHint" class="multi-hint hidden">
+            ☑️ Esta pergunta tem mais de uma resposta correta — marque todas
+          </div>
+
           <div class="options" id="options"></div>
           <div class="btn-group">
             <button class="confirm-btn" id="confirmBtn" disabled>✅ Confirmar Resposta</button>
@@ -129,6 +139,16 @@
 
   <div class="toast" id="toast">✓ Configurações salvas!</div>
 
-  <script src="script.js?v=5"></script>
+  <!-- JS — ordem importa -->
+  <script src="js/config.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/voz.js"></script>
+  <script src="js/efeitos.js"></script>
+  <script src="js/timer.js"></script>
+  <script src="js/modal-config.js"></script>
+  <script src="js/modal-sobre.js"></script>
+  <script src="js/quiz.js"></script>
+  <script src="js/main.js"></script>
 </body>
 </html>

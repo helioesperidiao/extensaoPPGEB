@@ -7,7 +7,7 @@ const Estado = {
   currentIndex: 0,
   score: 0,
   answered: false,
-  selectedIndex: null,
+  selectedIndexes: [],   // ← era selectedIndex: null (agora é array, suporta múltiplas)
   combo: 0,
   somAtivado: true,
   vozesDisponiveis: [],
@@ -52,6 +52,7 @@ const DOM = {
   quizContent: $('quizContent'),
   resultScreen: $('resultScreen'),
   quizContainer: $('quizContainer'),
+  multiHint: $('multiHint'),
 
   // Timer
   timerBar: $('timerBar'),
@@ -97,3 +98,23 @@ const DOM = {
   // Toast
   toast: $('toast')
 };
+
+// ============ HELPERS DE RESPOSTA MÚLTIPLA ============
+
+// Normaliza "correct" para array — aceita número OU array
+function getCorrectIndexes(q) {
+  return Array.isArray(q.correct) ? q.correct.slice() : [q.correct];
+}
+
+// Retorna true se a pergunta exige mais de uma marcação
+function isMultiResposta(q) {
+  return getCorrectIndexes(q).length > 1;
+}
+
+// Compara dois conjuntos (usa cópia para não mutar)
+function conjuntosIguais(a, b) {
+  if (a.length !== b.length) return false;
+  const sa = a.slice().sort();
+  const sb = b.slice().sort();
+  return sa.every((v, i) => v === sb[i]);
+}
