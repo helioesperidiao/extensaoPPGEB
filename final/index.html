@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <title>Quiz Interativo 🎉</title>
+
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/quiz.css">
+  <link rel="stylesheet" href="css/timer.css">
+  <link rel="stylesheet" href="css/modais.css">
+  <link rel="stylesheet" href="css/efeitos.css">
+  <link rel="stylesheet" href="css/responsivo.css">
+</head>
+<body>
+
+  <div class="page-wrapper">
+
+    <header class="brand-header">
+      <img src="logo.png" alt="Logo Univap" class="brand-logo">
+    </header>
+
+    <div class="quiz-container" id="quizContainer">
+      <div id="loading" class="loading">⏳ Carregando perguntas...</div>
+
+      <div id="quizMain" class="hidden">
+        <div class="quiz-header">
+          <span class="progress-info" id="progressInfo">Pergunta 1 de 5</span>
+          <div class="header-right">
+            <button class="icon-btn" id="soundBtn" title="Ligar/desligar som">🔊</button>
+            <button class="icon-btn" id="aboutBtn" title="Sobre">ℹ️</button>
+            <button class="icon-btn" id="settingsBtn" title="Configurações">⚙️</button>
+            <span class="score-badge" id="scoreBadge">⭐ 0 pts</span>
+          </div>
+        </div>
+
+        <div class="timer-bar" id="timerBar">
+          <div class="timer-fill" id="timerFill"></div>
+        </div>
+        <div class="timer-label" id="timerLabel">⏱️ 30s</div>
+
+        <div id="quizContent">
+          <div class="question-box">
+            <div class="question-text" id="questionText"></div>
+            <button class="speak-btn" id="speakBtn" title="Ouvir pergunta">🔊</button>
+          </div>
+          <div class="options" id="options"></div>
+          <div class="btn-group">
+            <button class="confirm-btn" id="confirmBtn" disabled>✅ Confirmar Resposta</button>
+            <button class="next-btn" id="nextBtn">Próxima ➜</button>
+          </div>
+        </div>
+
+        <div class="result-screen hidden" id="resultScreen">
+          <div class="result-emoji" id="resultEmoji">🎉</div>
+          <h2>Quiz Completo!</h2>
+          <p>Sua pontuação final:</p>
+          <div class="result-score" id="finalScore">0 / 0</div>
+          <p id="resultMessage"></p>
+          <button class="restart-btn" id="restartBtn">🔄 Jogar Novamente</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="modal-overlay" id="settingsModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>⚙️ Configurações</h2>
+        <button class="modal-close" id="modalCloseBtn" title="Fechar">✕</button>
+      </div>
+      <div class="modal-body">
+
+        <div class="section-title">🎮 Jogo</div>
+
+        <div class="field-group">
+          <label>
+            <input type="checkbox" id="timerAtivoCheck" class="check-input">
+            Usar tempo por pergunta
+          </label>
+        </div>
+
+        <div class="field-group" id="tempoFieldGroup">
+          <label for="tempoRange">Tempo por pergunta <span class="val" id="tempoValue">30s</span></label>
+          <input type="range" id="tempoRange" class="range-input" min="10" max="90" step="5" value="30">
+        </div>
+
+        <div class="section-title">🎙️ Locutor</div>
+
+        <div class="field-group">
+          <label for="voiceSelect">Voz</label>
+          <select id="voiceSelect" class="voice-select"></select>
+        </div>
+        <div class="field-group">
+          <label for="rateRange">Velocidade <span class="val" id="rateValue">1.00x</span></label>
+          <input type="range" id="rateRange" class="range-input" min="0.5" max="2" step="0.05" value="1">
+        </div>
+        <div class="field-group">
+          <label for="pitchRange">Tom <span class="val" id="pitchValue">1.00</span></label>
+          <input type="range" id="pitchRange" class="range-input" min="0.5" max="2" step="0.05" value="1">
+        </div>
+        <div class="field-group">
+          <label for="volumeRange">Volume <span class="val" id="volumeValue">100%</span></label>
+          <input type="range" id="volumeRange" class="range-input" min="0" max="1" step="0.05" value="1">
+        </div>
+
+        <div class="test-row">
+          <button class="test-voice-btn" id="testVoiceBtn">🔊 Testar voz</button>
+          <button class="reset-btn" id="resetConfigBtn" title="Restaurar padrões">↺ Padrões</button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn cancel" id="cancelBtn">Cancelar</button>
+        <button class="modal-btn save" id="saveBtn">💾 Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="aboutModal">
+    <div class="modal about-modal">
+      <div class="modal-header">
+        <h2>ℹ️ Sobre o Projeto</h2>
+        <button class="modal-close" id="aboutCloseBtn" title="Fechar">✕</button>
+      </div>
+      <div class="modal-body about-body" id="aboutBody"></div>
+      <div class="modal-footer">
+        <button class="modal-btn save" id="aboutOkBtn">Entendi</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">✓ Configurações salvas!</div>
+
+  <!-- JS — ordem importa -->
+  <script src="js/config.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/voz.js"></script>
+  <script src="js/efeitos.js"></script>
+  <script src="js/timer.js"></script>
+  <script src="js/modal-config.js"></script>
+  <script src="js/modal-sobre.js"></script>
+  <script src="js/quiz.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

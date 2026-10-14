@@ -1,0 +1,5126 @@
+================================================================================
+CONTEXTO DO PROJETO
+================================================================================
+
+
+================================================================================
+ARQUIVO: final\css\base.css
+================================================================================
+
+/* Reset, variáveis, fundo e animações globais do body */
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
+
+:root {
+  /* Paleta Univap oficial */
+  --azul-escuro: #00498B;
+  --azul-claro: #0677CC;
+  --ciano: #00BDB9;
+  --amarelo: #FBAB30;
+  --laranja: #D66C25;
+  --vermelho: #96100E;
+  --roxo: #996699;
+
+  /* Cores de feedback */
+  --verde-acerto: #38ef7d;
+  --verde-acerto-escuro: #11998e;
+
+  /* Neutros */
+  --branco: #ffffff;
+  --cinza-claro: #f5f7fa;
+  --cinza-medio: #e0e6ed;
+  --texto-escuro: #1a1a2e;
+  --texto-medio: #2c3e50;
+  --texto-suave: #555;
+}
+
+body {
+  min-height: 100vh;
+  background: linear-gradient(-45deg, #002a52, var(--azul-escuro), var(--azul-claro), var(--azul-escuro));
+  background-size: 400% 400%;
+  animation: gradientBG 20s ease infinite;
+  overflow-x: hidden;
+  position: relative;
+  padding: 30px 20px;
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(0, 189, 185, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(251, 171, 48, 0.10) 0%, transparent 55%);
+  pointer-events: none;
+  z-index: 0;
+  animation: bgPulse 6s ease-in-out infinite;
+}
+
+@keyframes bgPulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* Estados globais do body */
+body.shake { animation: shakeScreen 0.5s cubic-bezier(.36,.07,.19,.97); }
+@keyframes shakeScreen {
+  10%, 90% { transform: translate3d(-2px, 0, 0); }
+  20%, 80% { transform: translate3d(4px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-8px, 0, 0); }
+  40%, 60% { transform: translate3d(8px, 0, 0); }
+}
+
+body.flash-green::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle, rgba(56,239,125,0.45) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 500;
+  animation: flashFade 0.6s ease-out forwards;
+}
+
+body.flash-red::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle, rgba(150, 16, 14, 0.55) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 500;
+  animation: flashFade 0.6s ease-out forwards;
+}
+
+@keyframes flashFade {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.hidden { display: none; }
+
+
+================================================================================
+ARQUIVO: final\css\efeitos.css
+================================================================================
+
+/* Efeitos visuais: combo, pontos flutuantes, partículas, confete */
+
+.combo-badge {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%) scale(0);
+  background: linear-gradient(135deg, var(--amarelo), var(--laranja), var(--vermelho));
+  color: var(--branco);
+  padding: 14px 32px;
+  border-radius: 30px;
+  font-size: 1.5rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.35);
+  box-shadow: 0 12px 40px rgba(214, 108, 37, 0.6),
+              0 0 60px rgba(251, 171, 48, 0.5);
+  z-index: 1500;
+  pointer-events: none;
+  text-transform: uppercase;
+}
+
+.combo-badge.show {
+  animation: comboPop 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+@keyframes comboPop {
+  0% { transform: translateX(-50%) scale(0) rotate(-180deg); opacity: 0; }
+  20% { transform: translateX(-50%) scale(1.3) rotate(10deg); opacity: 1; }
+  40% { transform: translateX(-50%) scale(1) rotate(-5deg); }
+  60% { transform: translateX(-50%) scale(1.15) rotate(3deg); }
+  80% { transform: translateX(-50%) scale(1) rotate(0); opacity: 1; }
+  100% { transform: translateX(-50%) scale(0.8) translateY(-40px); opacity: 0; }
+}
+
+.float-points {
+  position: fixed;
+  font-size: 2rem;
+  font-weight: 900;
+  pointer-events: none;
+  z-index: 2000;
+  text-shadow: 0 0 20px currentColor, 0 4px 8px rgba(0,0,0,0.3);
+  animation: floatUp 1.4s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+}
+
+@keyframes floatUp {
+  0% { opacity: 0; transform: translateY(0) scale(0.5) rotate(0); }
+  20% { opacity: 1; transform: translateY(-30px) scale(1.3) rotate(-10deg); }
+  60% { opacity: 1; transform: translateY(-80px) scale(1) rotate(10deg); }
+  100% { opacity: 0; transform: translateY(-180px) scale(0.8) rotate(0); }
+}
+
+.particle {
+  position: fixed;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1500;
+  animation: explode 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes explode {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--tx), var(--ty)) scale(0);
+    opacity: 0;
+  }
+}
+
+.confetti {
+  position: fixed;
+  width: 12px;
+  height: 12px;
+  top: -20px;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(110vh) rotate(1080deg);
+    opacity: 0;
+  }
+}
+
+.quiz-container.celebrating {
+  box-shadow: 0 25px 60px rgba(0,0,0,0.35),
+              0 0 60px rgba(0, 189, 185, 0.7),
+              0 0 110px rgba(0, 189, 185, 0.4);
+  animation: celebratePulse 0.6s ease;
+}
+
+@keyframes celebratePulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+.quiz-container.failing {
+  animation: failShake 0.5s ease;
+}
+
+@keyframes failShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes iconPop {
+  from { transform: scale(0); }
+  to { transform: scale(1); }
+}
+
+
+================================================================================
+ARQUIVO: final\css\layout.css
+================================================================================
+
+/* Estrutura principal: wrapper, logo, container do quiz */
+
+.page-wrapper {
+  min-height: calc(100vh - 60px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  position: relative;
+  z-index: 10;
+  animation: pageEnter 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+@keyframes pageEnter {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.brand-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 720px;
+}
+
+.brand-logo {
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+  display: block;
+}
+
+.quiz-container {
+  width: 100%;
+  max-width: 720px;
+  background: var(--branco);
+  border-radius: 24px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+  padding: 35px;
+  position: relative;
+  animation: slideIn 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  overflow: hidden;
+  transition: box-shadow 0.4s;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-60px) scale(0.9); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.quiz-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 10px;
+}
+
+.progress-info {
+  font-size: 0.9rem;
+  color: var(--texto-suave);
+  font-weight: 600;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.icon-btn {
+  background: var(--cinza-claro);
+  border: 2px solid var(--cinza-medio);
+  color: var(--azul-escuro);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.15rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.icon-btn:hover {
+  background: linear-gradient(135deg, var(--azul-escuro), var(--azul-claro));
+  color: var(--branco);
+  border-color: var(--azul-escuro);
+  transform: rotate(90deg) scale(1.1);
+  box-shadow: 0 6px 18px rgba(0, 73, 139, 0.5);
+}
+
+#aboutBtn:hover {
+  transform: rotate(-90deg) scale(1.1);
+  background: linear-gradient(135deg, var(--azul-claro), var(--ciano));
+  border-color: var(--azul-claro);
+  box-shadow: 0 6px 18px rgba(6, 119, 204, 0.5);
+}
+
+#soundBtn:hover { transform: rotate(0deg) scale(1.1); }
+#soundBtn.muted {
+  background: var(--cinza-claro);
+  color: #999;
+}
+#soundBtn.muted:hover {
+  background: linear-gradient(135deg, var(--vermelho), var(--laranja));
+  color: var(--branco);
+  border-color: var(--vermelho);
+  box-shadow: 0 6px 18px rgba(150, 16, 14, 0.5);
+}
+
+.score-badge {
+  background: linear-gradient(135deg, var(--azul-escuro), var(--azul-claro));
+  color: var(--branco);
+  padding: 8px 18px;
+  border-radius: 30px;
+  font-weight: bold;
+  font-size: 0.95rem;
+  box-shadow: 0 5px 15px rgba(0, 73, 139, 0.5);
+  transition: transform 0.3s;
+  position: relative;
+}
+
+.score-badge.bump { animation: bump 0.6s ease; }
+@keyframes bump {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.4) rotate(-5deg); }
+  50% { transform: scale(0.9) rotate(3deg); }
+  70% { transform: scale(1.15) rotate(-2deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+.progress-bar {
+  height: 8px;
+  background: var(--cinza-medio);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 25px;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--azul-escuro), var(--ciano), var(--amarelo), var(--azul-escuro));
+  background-size: 300% 100%;
+  border-radius: 10px;
+  transition: width 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  animation: shimmer 4s linear infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 300% 50%; }
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: var(--texto-suave);
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+
+================================================================================
+ARQUIVO: final\css\modais.css
+================================================================================
+
+/* Modais de configurações e sobre */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 20, 45, 0.75);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.modal-overlay.show { opacity: 1; pointer-events: all; }
+
+.modal {
+  width: 100%;
+  max-width: 480px;
+  background: var(--branco);
+  border-radius: 22px;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+  transform: translateY(30px) scale(0.95);
+  transition: transform 0.35s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-overlay.show .modal { transform: translateY(0) scale(1); }
+
+.modal-header {
+  background: linear-gradient(135deg, var(--azul-escuro), var(--azul-claro));
+  color: var(--branco);
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-header h2 {
+  font-size: 1.15rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+}
+
+.modal-close {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: var(--branco);
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s;
+}
+
+.modal-close:hover {
+  background: rgba(255, 255, 255, 0.35);
+  transform: rotate(90deg);
+}
+
+.modal-body {
+  padding: 24px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.section-title {
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #999;
+  margin-top: 6px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--cinza-claro);
+}
+
+.section-title:first-child { margin-top: 0; }
+
+.field-group { display: flex; flex-direction: column; gap: 8px; }
+
+.field-group label {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--texto-medio);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.field-group label:has(.check-input) {
+  justify-content: flex-start;
+  gap: 4px;
+  cursor: pointer;
+  padding: 6px 0;
+  font-size: 0.92rem;
+}
+
+.field-group label .val {
+  color: var(--azul-escuro);
+  font-weight: 800;
+  background: #e8f4fb;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 0.78rem;
+}
+
+.field-group.disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.check-input {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--cinza-medio);
+  border-radius: 6px;
+  background: var(--cinza-claro);
+  cursor: pointer;
+  position: relative;
+  transition: all 0.25s;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.check-input:hover { border-color: var(--azul-claro); }
+
+.check-input:checked {
+  background: linear-gradient(135deg, var(--azul-escuro), var(--azul-claro));
+  border-color: var(--azul-escuro);
+}
+
+.check-input:checked::after {
+  content: '✔';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--branco);
+  font-size: 0.75rem;
+  font-weight: 900;
+}
+
+.voice-select {
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: 12px;
+  border: 2px solid var(--cinza-medio);
+  background: #f9fafb;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--texto-medio);
+  cursor: pointer;
+  transition: all 0.25s;
+}
+
+.voice-select:hover,
+.voice-select:focus {
+  border-color: var(--azul-claro);
+  background: var(--branco);
+  outline: none;
+}
+
+.range-input {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 7px;
+  background: var(--cinza-medio);
+  border-radius: 5px;
+  outline: none;
+  cursor: pointer;
+}
+
+.range-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(135deg, var(--azul-escuro), var(--azul-claro));
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 3px 8px rgba(0, 73, 139, 0.5);
+  transition: transform 0.2s;
+}
+
+.range-input::-webkit-slider-thumb:hover { transform: scale(1.2); }
+
+.range-input::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: linear-gradient(135deg, var(--azul-escuro), var(--azul-claro));
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+
+.test-row { display: flex; gap: 10px; }
+
+.test-voice-btn {
+  flex: 1;
+  padding: 11px;
+  background: var(--cinza-claro);
+  color: var(--azul-escuro);
+  border: 2px solid var(--cinza-medio);
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+
+.test-voice-btn:hover {
+  background: linear-gradient(135deg, var(--azul-escuro), var(--azul-claro));
+  color: var(--branco);
+  border-color: var(--azul-escuro);
+  transform: translateY(-2px);
+}
+
+.reset-btn {
+  flex: 0 0 auto;
+  padding: 11px 16px;
+  background: var(--branco);
+  color: var(--vermelho);
+  border: 2px solid #fbd6d5;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+
+.reset-btn:hover {
+  background: var(--vermelho);
+  color: var(--branco);
+  border-color: var(--vermelho);
+  transform: translateY(-2px);
+}
+
+.modal-footer {
+  padding: 16px 24px 22px;
+  display: flex;
+  gap: 12px;
+  border-top: 1px solid var(--cinza-claro);
+  background: #fafbfc;
+}
+
+.modal-btn {
+  flex: 1;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+
+.modal-btn.cancel {
+  background: var(--cinza-claro);
+  color: var(--texto-suave);
+}
+
+.modal-btn.cancel:hover { background: var(--cinza-medio); }
+
+.modal-btn.save {
+  background: linear-gradient(135deg, var(--azul-escuro), var(--azul-claro));
+  color: var(--branco);
+  box-shadow: 0 6px 18px rgba(0, 73, 139, 0.4);
+}
+
+.modal-btn.save:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 73, 139, 0.6);
+}
+
+/* Modal Sobre */
+.about-modal { max-width: 520px; }
+
+.about-body {
+  gap: 20px;
+  text-align: center;
+  padding: 28px 26px;
+}
+
+.about-titulo {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--azul-escuro);
+  margin-bottom: 4px;
+}
+
+.about-descricao {
+  font-size: 0.95rem;
+  color: var(--texto-suave);
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+.about-secao {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+}
+
+.about-secao-titulo {
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #999;
+  margin-bottom: 2px;
+}
+
+.about-pessoa {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 14px;
+  background: #f9fafb;
+  border: 2px solid var(--cinza-medio);
+  border-radius: 12px;
+  transition: all 0.25s;
+}
+
+.about-pessoa:hover {
+  background: var(--branco);
+  border-color: var(--azul-claro);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(6, 119, 204, 0.15);
+}
+
+.about-pessoa-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+.about-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--azul-escuro), var(--azul-claro));
+  color: var(--branco);
+  font-weight: 800;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(0, 73, 139, 0.4);
+}
+
+.about-avatar.professor {
+  background: linear-gradient(135deg, var(--vermelho), #d4181a);
+  box-shadow: 0 4px 10px rgba(150, 16, 14, 0.5);
+}
+
+.about-pessoa-nome {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--texto-escuro);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.about-links { display: flex; gap: 6px; flex-shrink: 0; }
+
+.about-link {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--branco);
+  transition: all 0.25s;
+  cursor: pointer;
+}
+
+.about-link.linkedin {
+  background: linear-gradient(135deg, var(--azul-claro), var(--azul-escuro));
+  box-shadow: 0 4px 10px rgba(6, 119, 204, 0.35);
+}
+
+.about-link.linkedin:hover {
+  transform: scale(1.15) rotate(-5deg);
+  box-shadow: 0 6px 16px rgba(6, 119, 204, 0.6);
+}
+
+.about-link.lattes {
+  background: linear-gradient(135deg, var(--azul-escuro), #002a52);
+  box-shadow: 0 4px 10px rgba(0, 73, 139, 0.35);
+}
+
+.about-link.lattes:hover {
+  transform: scale(1.15) rotate(5deg);
+  box-shadow: 0 6px 16px rgba(0, 73, 139, 0.6);
+}
+
+.about-rodape {
+  margin-top: 12px;
+  padding-top: 14px;
+  border-top: 1px solid var(--cinza-claro);
+  font-size: 0.8rem;
+  color: #999;
+  font-weight: 600;
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: linear-gradient(135deg, var(--azul-escuro), var(--azul-claro));
+  color: var(--branco);
+  padding: 14px 26px;
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  box-shadow: 0 12px 30px rgba(0, 73, 139, 0.5);
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  z-index: 2000;
+  pointer-events: none;
+}
+
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+
+================================================================================
+ARQUIVO: final\css\quiz.css
+================================================================================
+
+/* Pergunta, alternativas, botões de ação e tela de resultado */
+
+.question-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.question-text {
+  font-size: 1.35rem;
+  color: var(--texto-escuro);
+  font-weight: 600;
+  line-height: 1.5;
+  flex: 1;
+  animation: questionEnter 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+@keyframes questionEnter {
+  0% { opacity: 0; transform: translateX(-40px) rotate(-2deg); }
+  100% { opacity: 1; transform: translateX(0) rotate(0); }
+}
+
+.speak-btn {
+  background: linear-gradient(135deg, var(--azul-claro), var(--azul-escuro));
+  border: none;
+  color: var(--branco);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 5px 15px rgba(0, 73, 139, 0.4);
+  transition: all 0.3s;
+}
+
+.speak-btn:hover { transform: scale(1.15) rotate(-10deg); }
+.speak-btn:active { transform: scale(0.9); }
+.speak-btn.speaking { animation: pulse 1s infinite; }
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(6, 119, 204, 0.7); }
+  50% { box-shadow: 0 0 0 15px rgba(6, 119, 204, 0); }
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.option {
+  padding: 16px 20px;
+  background: var(--cinza-claro);
+  border: 2px solid var(--cinza-medio);
+  border-radius: 14px;
+  cursor: pointer;
+  font-size: 1.05rem;
+  color: var(--texto-medio);
+  font-weight: 500;
+  text-align: left;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+  animation: optionEnter 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) backwards;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.option:nth-child(1) { animation-delay: 0.1s; }
+.option:nth-child(2) { animation-delay: 0.2s; }
+.option:nth-child(3) { animation-delay: 0.3s; }
+.option:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes optionEnter {
+  0% { opacity: 0; transform: translateX(-50px) scale(0.9); }
+  60% { opacity: 1; transform: translateX(10px) scale(1.02); }
+  100% { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+.option::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 0; height: 0;
+  background: radial-gradient(circle, rgba(6, 119, 204, 0.5) 0%, transparent 70%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.5s ease, height 0.5s ease, opacity 0.5s;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.option.rippling::before {
+  width: 500px;
+  height: 500px;
+  opacity: 1;
+  transition: width 0s, height 0s, opacity 0.6s;
+}
+
+.option:hover:not(.disabled) {
+  background: #e8f4fb;
+  border-color: var(--azul-claro);
+  transform: translateX(10px) scale(1.02);
+  box-shadow: 0 5px 20px rgba(6, 119, 204, 0.3);
+}
+
+.option.selected {
+  background: linear-gradient(135deg, var(--azul-claro), var(--azul-escuro));
+  border-color: var(--azul-escuro);
+  color: var(--branco);
+  transform: translateX(10px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(0, 73, 139, 0.6);
+  animation: selectedPop 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+@keyframes selectedPop {
+  0% { transform: scale(1) translateX(0); }
+  50% { transform: scale(1.08) translateX(12px); }
+  100% { transform: scale(1.02) translateX(10px); }
+}
+
+.option.selected::after {
+  content: '🎧';
+  font-size: 1.2rem;
+  animation: iconPop 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+.option.disabled { cursor: not-allowed; }
+
+.option.correct {
+  background: linear-gradient(135deg, var(--verde-acerto-escuro), var(--verde-acerto));
+  border-color: var(--verde-acerto-escuro);
+  color: var(--branco);
+  animation: correctBoom 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  box-shadow: 0 0 30px rgba(56, 239, 125, 0.9),
+              0 0 60px rgba(56, 239, 125, 0.5);
+  transform: translateX(0) scale(1.02);
+  z-index: 5;
+}
+
+@keyframes correctBoom {
+  0% { transform: scale(1) rotate(0); }
+  20% { transform: scale(1.15) rotate(-3deg); }
+  40% { transform: scale(0.95) rotate(3deg); }
+  60% { transform: scale(1.1) rotate(-2deg); }
+  80% { transform: scale(0.98) rotate(1deg); }
+  100% { transform: scale(1.02) rotate(0); }
+}
+
+.option.wrong {
+  background: linear-gradient(135deg, var(--vermelho), #d4181a);
+  border-color: var(--vermelho);
+  color: var(--branco);
+  animation: wrongShake 0.7s cubic-bezier(.36,.07,.19,.97);
+  box-shadow: 0 0 25px rgba(150, 16, 14, 0.8);
+  transform: translateX(0);
+}
+
+@keyframes wrongShake {
+  10%, 90% { transform: translate3d(-4px, 0, 0) rotate(-1deg); }
+  20%, 80% { transform: translate3d(6px, 0, 0) rotate(1deg); }
+  30%, 50%, 70% { transform: translate3d(-12px, 0, 0) rotate(-2deg); }
+  40%, 60% { transform: translate3d(12px, 0, 0) rotate(2deg); }
+}
+
+.option .icon {
+  font-size: 1.4rem;
+  animation: iconBoom 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+@keyframes iconBoom {
+  0% { transform: scale(0) rotate(-180deg); }
+  60% { transform: scale(1.4) rotate(20deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+
+/* Botões de ação */
+.btn-group {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+.confirm-btn,
+.next-btn {
+  flex: 1;
+  padding: 16px;
+  color: var(--branco);
+  border: none;
+  border-radius: 14px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: none;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.confirm-btn {
+  background: linear-gradient(135deg, var(--azul-escuro), var(--azul-claro), var(--azul-escuro));
+  background-size: 200% 100%;
+  box-shadow: 0 8px 25px rgba(0, 73, 139, 0.5);
+  animation: btnShimmer 3s linear infinite;
+}
+
+.next-btn {
+  background: linear-gradient(135deg, var(--azul-claro), var(--ciano));
+  box-shadow: 0 8px 25px rgba(6, 119, 204, 0.5);
+}
+
+@keyframes btnShimmer {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+.confirm-btn:hover:not(:disabled) {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 12px 35px rgba(0, 73, 139, 0.8);
+}
+.confirm-btn:active:not(:disabled) { transform: translateY(0) scale(0.98); }
+.confirm-btn:disabled {
+  background: #b0b0b0;
+  cursor: not-allowed;
+  box-shadow: none;
+  animation: none;
+}
+
+.next-btn:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 12px 35px rgba(6, 119, 204, 0.8);
+}
+.next-btn:active { transform: translateY(0) scale(0.98); }
+
+/* Tela de resultado */
+.result-screen {
+  text-align: center;
+  padding: 20px 0;
+  animation: fadeIn 0.6s ease;
+}
+
+.result-screen h2 {
+  font-size: 2.4rem;
+  background: linear-gradient(135deg, var(--azul-escuro), var(--ciano), var(--azul-escuro));
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 15px;
+  animation: rainbowText 3s linear infinite;
+}
+
+@keyframes rainbowText {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+.result-emoji {
+  font-size: 5rem;
+  margin-bottom: 15px;
+  animation: bounceBig 1s infinite;
+  display: inline-block;
+}
+
+@keyframes bounceBig {
+  0%, 100% { transform: translateY(0) scale(1) rotate(0); }
+  25% { transform: translateY(-25px) scale(1.1) rotate(-8deg); }
+  50% { transform: translateY(0) scale(1) rotate(0); }
+  75% { transform: translateY(-15px) scale(1.05) rotate(8deg); }
+}
+
+.result-screen p {
+  font-size: 1.2rem;
+  color: #444;
+  margin-bottom: 10px;
+}
+
+.result-score {
+  font-size: 3.5rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--azul-escuro), var(--ciano), var(--azul-escuro));
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 20px 0;
+  animation: rainbowText 2s linear infinite;
+}
+
+.restart-btn {
+  padding: 16px 44px;
+  background: linear-gradient(135deg, var(--azul-escuro), var(--azul-claro), var(--azul-escuro));
+  background-size: 200% auto;
+  color: var(--branco);
+  border: none;
+  border-radius: 30px;
+  font-size: 1.15rem;
+  font-weight: 800;
+  cursor: pointer;
+  margin-top: 15px;
+  box-shadow: 0 8px 25px rgba(0, 73, 139, 0.5);
+  transition: all 0.3s;
+  animation: btnShimmer 3s linear infinite;
+}
+
+.restart-btn:hover {
+  transform: scale(1.08) rotate(-2deg);
+  box-shadow: 0 15px 40px rgba(0, 73, 139, 0.8);
+}
+
+
+================================================================================
+ARQUIVO: final\css\responsivo.css
+================================================================================
+
+/* Media queries — carregado por último para sobrescrever */
+
+@media (max-width: 900px) {
+  .page-wrapper { gap: 25px; }
+  .brand-logo { max-width: 380px; }
+}
+
+@media (max-width: 600px) {
+  body { padding: 16px 12px; }
+  .page-wrapper { min-height: auto; gap: 20px; }
+  .quiz-container { padding: 22px; }
+  .question-text { font-size: 1.1rem; }
+  .option { font-size: 0.95rem; padding: 14px 16px; }
+  .btn-group { flex-direction: column; }
+  .modal-footer { flex-direction: column; }
+  .result-score { font-size: 2.8rem; }
+  .brand-logo { max-width: 85vw; }
+  .about-pessoa { flex-wrap: wrap; }
+  .timer-bar { height: 8px; }
+  .timer-label { font-size: 0.75rem; margin-bottom: 14px; }
+}
+
+
+================================================================================
+ARQUIVO: final\css\timer.css
+================================================================================
+
+/* Barra de tempo regressiva */
+
+.timer-bar {
+  height: 10px;
+  background: var(--cinza-medio);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 6px;
+  position: relative;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.timer-fill {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, var(--ciano), var(--azul-escuro));
+  border-radius: 10px;
+  transition: width 0.1s linear, background 0.3s ease;
+  transform-origin: left;
+}
+
+.timer-fill.warning {
+  background: linear-gradient(90deg, var(--amarelo), var(--laranja));
+  animation: timerPulse 0.6s ease infinite;
+}
+
+.timer-fill.danger {
+  background: linear-gradient(90deg, var(--laranja), var(--vermelho));
+  animation: timerPulse 0.35s ease infinite;
+}
+
+@keyframes timerPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.65; }
+}
+
+.timer-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--azul-escuro);
+  text-align: right;
+  margin-bottom: 18px;
+  transition: color 0.3s;
+}
+
+.timer-label.warning { color: var(--laranja); }
+.timer-label.danger {
+  color: var(--vermelho);
+  animation: timerLabelPulse 0.4s ease infinite;
+}
+
+@keyframes timerLabelPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+}
+
+.quiz-container.time-up {
+  animation: timeUpFlash 0.6s ease 2;
+}
+
+@keyframes timeUpFlash {
+  0%, 100% { box-shadow: 0 25px 60px rgba(0,0,0,0.35); }
+  50% { box-shadow: 0 25px 60px rgba(0,0,0,0.35),
+                    0 0 60px rgba(150, 16, 14, 0.9),
+                    0 0 100px rgba(150, 16, 14, 0.5); }
+}
+
+
+================================================================================
+ARQUIVO: final\index.html
+================================================================================
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <title>Quiz Interativo 🎉</title>
+
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/quiz.css">
+  <link rel="stylesheet" href="css/timer.css">
+  <link rel="stylesheet" href="css/modais.css">
+  <link rel="stylesheet" href="css/efeitos.css">
+  <link rel="stylesheet" href="css/responsivo.css">
+</head>
+<body>
+
+  <div class="page-wrapper">
+
+    <header class="brand-header">
+      <img src="logo.png" alt="Logo Univap" class="brand-logo">
+    </header>
+
+    <div class="quiz-container" id="quizContainer">
+      <div id="loading" class="loading">⏳ Carregando perguntas...</div>
+
+      <div id="quizMain" class="hidden">
+        <div class="quiz-header">
+          <span class="progress-info" id="progressInfo">Pergunta 1 de 5</span>
+          <div class="header-right">
+            <button class="icon-btn" id="soundBtn" title="Ligar/desligar som">🔊</button>
+            <button class="icon-btn" id="aboutBtn" title="Sobre">ℹ️</button>
+            <button class="icon-btn" id="settingsBtn" title="Configurações">⚙️</button>
+            <span class="score-badge" id="scoreBadge">⭐ 0 pts</span>
+          </div>
+        </div>
+
+        <div class="timer-bar" id="timerBar">
+          <div class="timer-fill" id="timerFill"></div>
+        </div>
+        <div class="timer-label" id="timerLabel">⏱️ 30s</div>
+
+        <div id="quizContent">
+          <div class="question-box">
+            <div class="question-text" id="questionText"></div>
+            <button class="speak-btn" id="speakBtn" title="Ouvir pergunta">🔊</button>
+          </div>
+          <div class="options" id="options"></div>
+          <div class="btn-group">
+            <button class="confirm-btn" id="confirmBtn" disabled>✅ Confirmar Resposta</button>
+            <button class="next-btn" id="nextBtn">Próxima ➜</button>
+          </div>
+        </div>
+
+        <div class="result-screen hidden" id="resultScreen">
+          <div class="result-emoji" id="resultEmoji">🎉</div>
+          <h2>Quiz Completo!</h2>
+          <p>Sua pontuação final:</p>
+          <div class="result-score" id="finalScore">0 / 0</div>
+          <p id="resultMessage"></p>
+          <button class="restart-btn" id="restartBtn">🔄 Jogar Novamente</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="modal-overlay" id="settingsModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>⚙️ Configurações</h2>
+        <button class="modal-close" id="modalCloseBtn" title="Fechar">✕</button>
+      </div>
+      <div class="modal-body">
+
+        <div class="section-title">🎮 Jogo</div>
+
+        <div class="field-group">
+          <label>
+            <input type="checkbox" id="timerAtivoCheck" class="check-input">
+            Usar tempo por pergunta
+          </label>
+        </div>
+
+        <div class="field-group" id="tempoFieldGroup">
+          <label for="tempoRange">Tempo por pergunta <span class="val" id="tempoValue">30s</span></label>
+          <input type="range" id="tempoRange" class="range-input" min="10" max="90" step="5" value="30">
+        </div>
+
+        <div class="section-title">🎙️ Locutor</div>
+
+        <div class="field-group">
+          <label for="voiceSelect">Voz</label>
+          <select id="voiceSelect" class="voice-select"></select>
+        </div>
+        <div class="field-group">
+          <label for="rateRange">Velocidade <span class="val" id="rateValue">1.00x</span></label>
+          <input type="range" id="rateRange" class="range-input" min="0.5" max="2" step="0.05" value="1">
+        </div>
+        <div class="field-group">
+          <label for="pitchRange">Tom <span class="val" id="pitchValue">1.00</span></label>
+          <input type="range" id="pitchRange" class="range-input" min="0.5" max="2" step="0.05" value="1">
+        </div>
+        <div class="field-group">
+          <label for="volumeRange">Volume <span class="val" id="volumeValue">100%</span></label>
+          <input type="range" id="volumeRange" class="range-input" min="0" max="1" step="0.05" value="1">
+        </div>
+
+        <div class="test-row">
+          <button class="test-voice-btn" id="testVoiceBtn">🔊 Testar voz</button>
+          <button class="reset-btn" id="resetConfigBtn" title="Restaurar padrões">↺ Padrões</button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn cancel" id="cancelBtn">Cancelar</button>
+        <button class="modal-btn save" id="saveBtn">💾 Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="aboutModal">
+    <div class="modal about-modal">
+      <div class="modal-header">
+        <h2>ℹ️ Sobre o Projeto</h2>
+        <button class="modal-close" id="aboutCloseBtn" title="Fechar">✕</button>
+      </div>
+      <div class="modal-body about-body" id="aboutBody"></div>
+      <div class="modal-footer">
+        <button class="modal-btn save" id="aboutOkBtn">Entendi</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">✓ Configurações salvas!</div>
+
+  <!-- JS — ordem importa -->
+  <script src="js/config.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/voz.js"></script>
+  <script src="js/efeitos.js"></script>
+  <script src="js/timer.js"></script>
+  <script src="js/modal-config.js"></script>
+  <script src="js/modal-sobre.js"></script>
+  <script src="js/quiz.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
+
+
+================================================================================
+ARQUIVO: final\js\audio.js
+================================================================================
+
+// ============ ÁUDIO (Web Audio API) ============
+// Todos os sons são gerados por síntese — não precisa de arquivos
+
+function getAudioCtx() {
+  if (!Estado.audioCtx) {
+    Estado.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (Estado.audioCtx.state === 'suspended') Estado.audioCtx.resume();
+  return Estado.audioCtx;
+}
+
+function tocarTom(freq, dur, type = 'sine', volume = 0.15, delay = 0) {
+  if (!Estado.somAtivado) return;
+  try {
+    const ctx = getAudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = type;
+    osc.frequency.value = freq;
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    const start = ctx.currentTime + delay;
+    gain.gain.setValueAtTime(0, start);
+    gain.gain.linearRampToValueAtTime(volume, start + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.001, start + dur);
+    osc.start(start);
+    osc.stop(start + dur);
+  } catch (e) { console.warn('[audio] Erro:', e); }
+}
+
+function somAcerto() {
+  tocarTom(523.25, 0.15, 'sine', 0.18, 0);
+  tocarTom(659.25, 0.15, 'sine', 0.18, 0.08);
+  tocarTom(783.99, 0.20, 'sine', 0.18, 0.16);
+  tocarTom(1046.5, 0.35, 'sine', 0.20, 0.24);
+}
+
+function somErro() {
+  tocarTom(220, 0.15, 'sawtooth', 0.12, 0);
+  tocarTom(185, 0.20, 'sawtooth', 0.12, 0.10);
+  tocarTom(138.6, 0.35, 'sawtooth', 0.14, 0.22);
+}
+
+function somClique() {
+  tocarTom(880, 0.06, 'square', 0.06, 0);
+}
+
+function somCombo(nivel) {
+  const base = 523.25 * Math.pow(1.12, Math.min(nivel, 8));
+  tocarTom(base, 0.1, 'triangle', 0.15, 0);
+  tocarTom(base * 1.5, 0.15, 'triangle', 0.15, 0.08);
+}
+
+function somVitoria() {
+  const notas = [523.25, 659.25, 783.99, 1046.5, 783.99, 1046.5, 1318.5];
+  notas.forEach((f, i) => tocarTom(f, 0.25, 'sine', 0.18, i * 0.13));
+  notas.forEach((f, i) => tocarTom(f * 0.5, 0.25, 'triangle', 0.08, i * 0.13));
+}
+
+function somDerrota() {
+  const notas = [392, 349.23, 293.66, 220];
+  notas.forEach((f, i) => tocarTom(f, 0.4, 'sine', 0.15, i * 0.22));
+}
+
+function somTempoEsgotado() {
+  tocarTom(180, 0.3, 'sawtooth', 0.18, 0);
+  tocarTom(140, 0.3, 'sawtooth', 0.18, 0.15);
+  tocarTom(100, 0.5, 'sawtooth', 0.18, 0.3);
+}
+
+function somTique() {
+  tocarTom(1200, 0.04, 'square', 0.04, 0);
+}
+
+
+================================================================================
+ARQUIVO: final\js\config.js
+================================================================================
+
+// ============ ESTADO GLOBAL ============
+// Este arquivo roda primeiro. Todos os outros usam essas variáveis.
+
+const Estado = {
+  quizData: null,
+  sobreData: null,
+  currentIndex: 0,
+  score: 0,
+  answered: false,
+  selectedIndex: null,
+  combo: 0,
+  somAtivado: true,
+  vozesDisponiveis: [],
+  synth: window.speechSynthesis,
+  audioCtx: null,
+  timerInterval: null,
+  timeLeft: 0
+};
+
+// Configuração ativa (voz + jogo)
+let configAtiva = {
+  voiceName: null,
+  voiceLang: null,
+  rate: 1,
+  pitch: 1,
+  volume: 1,
+  timerAtivo: true,
+  tempoPergunta: 30
+};
+
+let configTemp = { ...configAtiva };
+
+// ============ CONSTANTES ============
+const STORAGE_KEY = 'quizVoiceConfig';
+const STORAGE_SOM = 'quizSomAtivado';
+
+// ============ ATALHOS PARA ELEMENTOS DO DOM ============
+const $ = (id) => document.getElementById(id);
+
+const DOM = {
+  // Quiz
+  loading: $('loading'),
+  quizMain: $('quizMain'),
+  questionText: $('questionText'),
+  options: $('options'),
+  nextBtn: $('nextBtn'),
+  confirmBtn: $('confirmBtn'),
+  progressInfo: $('progressInfo'),
+  progressFill: $('progressFill'),
+  scoreBadge: $('scoreBadge'),
+  speakBtn: $('speakBtn'),
+  quizContent: $('quizContent'),
+  resultScreen: $('resultScreen'),
+  quizContainer: $('quizContainer'),
+
+  // Timer
+  timerBar: $('timerBar'),
+  timerFill: $('timerFill'),
+  timerLabel: $('timerLabel'),
+
+  // Botões topo
+  soundBtn: $('soundBtn'),
+  aboutBtn: $('aboutBtn'),
+  settingsBtn: $('settingsBtn'),
+
+  // Modal configurações
+  settingsModal: $('settingsModal'),
+  modalCloseBtn: $('modalCloseBtn'),
+  cancelBtn: $('cancelBtn'),
+  saveBtn: $('saveBtn'),
+  resetConfigBtn: $('resetConfigBtn'),
+  voiceSelect: $('voiceSelect'),
+  rateRange: $('rateRange'),
+  pitchRange: $('pitchRange'),
+  volumeRange: $('volumeRange'),
+  rateValue: $('rateValue'),
+  pitchValue: $('pitchValue'),
+  volumeValue: $('volumeValue'),
+  testVoiceBtn: $('testVoiceBtn'),
+  timerAtivoCheck: $('timerAtivoCheck'),
+  tempoRange: $('tempoRange'),
+  tempoValue: $('tempoValue'),
+  tempoFieldGroup: $('tempoFieldGroup'),
+
+  // Modal sobre
+  aboutModal: $('aboutModal'),
+  aboutCloseBtn: $('aboutCloseBtn'),
+  aboutOkBtn: $('aboutOkBtn'),
+  aboutBody: $('aboutBody'),
+
+  // Resultado
+  resultEmoji: $('resultEmoji'),
+  finalScore: $('finalScore'),
+  resultMessage: $('resultMessage'),
+  restartBtn: $('restartBtn'),
+
+  // Toast
+  toast: $('toast')
+};
+
+
+================================================================================
+ARQUIVO: final\js\efeitos.js
+================================================================================
+
+// ============ EFEITOS VISUAIS ============
+
+function screenShake() {
+  document.body.classList.add('shake');
+  setTimeout(() => document.body.classList.remove('shake'), 500);
+}
+
+function screenFlash(color) {
+  document.body.classList.add('flash-' + color);
+  setTimeout(() => document.body.classList.remove('flash-' + color), 600);
+}
+
+function celebraContainer() {
+  if (!DOM.quizContainer) return;
+  DOM.quizContainer.classList.add('celebrating');
+  setTimeout(() => DOM.quizContainer.classList.remove('celebrating'), 700);
+}
+
+function tremeContainer() {
+  if (!DOM.quizContainer) return;
+  DOM.quizContainer.classList.add('failing');
+  setTimeout(() => DOM.quizContainer.classList.remove('failing'), 500);
+}
+
+function flashTimeUp() {
+  if (!DOM.quizContainer) return;
+  DOM.quizContainer.classList.add('time-up');
+  setTimeout(() => DOM.quizContainer.classList.remove('time-up'), 1400);
+}
+
+function explodirParticulas(x, y, qtd = 25, cores = null) {
+  const palette = cores || ['#00498B', '#0677CC', '#00BDB9', '#FBAB30', '#96100E', '#D66C25'];
+  for (let i = 0; i < qtd; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const cor = palette[Math.floor(Math.random() * palette.length)];
+    p.style.background = cor;
+    p.style.boxShadow = `0 0 15px ${cor}, 0 0 30px ${cor}`;
+    p.style.left = x + 'px';
+    p.style.top = y + 'px';
+    const angulo = Math.random() * Math.PI * 2;
+    const dist = Math.random() * 220 + 80;
+    p.style.setProperty('--tx', Math.cos(angulo) * dist + 'px');
+    p.style.setProperty('--ty', Math.sin(angulo) * dist + 'px');
+    const size = Math.random() * 10 + 6;
+    p.style.width = size + 'px';
+    p.style.height = size + 'px';
+    p.style.animationDuration = (Math.random() * 0.5 + 0.7) + 's';
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 1500);
+  }
+}
+
+function burstConfetti(amount) {
+  const colors = ['#00498B', '#0677CC', '#00BDB9', '#FBAB30', '#96100E', '#D66C25'];
+  for (let i = 0; i < amount; i++) {
+    const conf = document.createElement('div');
+    conf.className = 'confetti';
+    conf.style.left = Math.random() * 100 + 'vw';
+    conf.style.background = colors[Math.floor(Math.random() * colors.length)];
+    conf.style.animationDuration = (Math.random() * 2.5 + 2) + 's';
+    conf.style.animationDelay = (Math.random() * 0.8) + 's';
+    conf.style.animationName = 'fall';
+    conf.style.animationTimingFunction = 'ease-in';
+    conf.style.animationFillMode = 'forwards';
+    conf.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    const size = Math.random() * 10 + 6;
+    conf.style.width = conf.style.height = size + 'px';
+    document.body.appendChild(conf);
+    setTimeout(() => conf.remove(), 5000);
+  }
+}
+
+function mostrarPontosFlutuantes(x, y, texto, cor = '#38ef7d') {
+  const el = document.createElement('div');
+  el.className = 'float-points';
+  el.textContent = texto;
+  el.style.left = x + 'px';
+  el.style.top = y + 'px';
+  el.style.color = cor;
+  el.style.transform = 'translate(-50%, -50%)';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1500);
+}
+
+function mostrarCombo(nivel) {
+  const el = document.createElement('div');
+  el.className = 'combo-badge show';
+  el.textContent = `🔥 COMBO x${nivel}!`;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1300);
+}
+
+
+================================================================================
+ARQUIVO: final\js\main.js
+================================================================================
+
+// ============ INICIALIZAÇÃO ============
+// Último arquivo a rodar. Junta tudo.
+
+function carregarJSONs() {
+  return Promise.all([
+    fetch('questoes.json').then(r => {
+      if (!r.ok) throw new Error('Erro ao carregar questoes.json');
+      return r.json();
+    }),
+    fetch('sobre.json').then(r => {
+      if (!r.ok) throw new Error('Erro ao carregar sobre.json');
+      return r.json();
+    }).catch(() => null)
+  ]);
+}
+
+function inicializar() {
+  console.log('[DEBUG] Inicializando quiz...');
+
+  // 1) Carrega config do localStorage
+  carregarConfig();
+  carregarSom();
+
+  // 2) Configura eventos dos botões e modais
+  configurarEventosModalConfig();
+  configurarEventosModalSobre();
+  configurarEventosQuiz();
+
+  // 3) Carrega vozes
+  speechSynthesis.onvoiceschanged = listarVozes;
+  listarVozes();
+  setTimeout(listarVozes, 200);
+
+  // 4) Carrega JSONs e inicia o quiz
+  carregarJSONs()
+    .then(([questoes, sobre]) => {
+      Estado.quizData = questoes;
+      Estado.sobreData = sobre;
+
+      if (DOM.loading) DOM.loading.classList.add('hidden');
+      if (DOM.quizMain) DOM.quizMain.classList.remove('hidden');
+
+      if (sobre) {
+        renderizarSobre(sobre);
+      } else if (DOM.aboutBody) {
+        DOM.aboutBody.innerHTML =
+          '<div class="about-descricao">Não foi possível carregar <b>sobre.json</b>.</div>';
+      }
+
+      loadQuestion();
+    })
+    .catch(err => {
+      if (DOM.loading) {
+        DOM.loading.innerHTML =
+          `❌ Erro ao carregar <b>questoes.json</b>.<br><small>${err.message}</small>`;
+      }
+      console.error('[ERRO] Falha ao carregar JSONs:', err);
+    });
+}
+
+// Aguarda o DOM estar pronto
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', inicializar);
+} else {
+  inicializar();
+}
+
+
+================================================================================
+ARQUIVO: final\js\modal-config.js
+================================================================================
+
+// ============ MODAL DE CONFIGURAÇÕES ============
+
+function abrirModal() {
+  configTemp = { ...configAtiva };
+
+  selecionarVozNoSelect(configTemp.voiceName, configTemp.voiceLang);
+
+  if (DOM.rateRange) DOM.rateRange.value = configTemp.rate;
+  if (DOM.pitchRange) DOM.pitchRange.value = configTemp.pitch;
+  if (DOM.volumeRange) DOM.volumeRange.value = configTemp.volume;
+  if (DOM.timerAtivoCheck) DOM.timerAtivoCheck.checked = configTemp.timerAtivo;
+  if (DOM.tempoRange) DOM.tempoRange.value = configTemp.tempoPergunta;
+  if (DOM.tempoFieldGroup) DOM.tempoFieldGroup.classList.toggle('disabled', !configTemp.timerAtivo);
+
+  atualizarLabels();
+  if (DOM.settingsModal) DOM.settingsModal.classList.add('show');
+  somClique();
+}
+
+function fecharModal() {
+  if (DOM.settingsModal) DOM.settingsModal.classList.remove('show');
+  speechSynthesis.cancel();
+}
+
+function atualizarLabels() {
+  if (DOM.rateValue && DOM.rateRange)
+    DOM.rateValue.textContent = parseFloat(DOM.rateRange.value).toFixed(2) + 'x';
+  if (DOM.pitchValue && DOM.pitchRange)
+    DOM.pitchValue.textContent = parseFloat(DOM.pitchRange.value).toFixed(2);
+  if (DOM.volumeValue && DOM.volumeRange)
+    DOM.volumeValue.textContent = Math.round(DOM.volumeRange.value * 100) + '%';
+  if (DOM.tempoValue && DOM.tempoRange)
+    DOM.tempoValue.textContent = DOM.tempoRange.value + 's';
+}
+
+function configurarEventosModalConfig() {
+  if (DOM.settingsBtn) DOM.settingsBtn.addEventListener('click', abrirModal);
+  if (DOM.modalCloseBtn) DOM.modalCloseBtn.addEventListener('click', fecharModal);
+  if (DOM.cancelBtn) DOM.cancelBtn.addEventListener('click', fecharModal);
+
+  if (DOM.settingsModal) {
+    DOM.settingsModal.addEventListener('click', e => {
+      if (e.target === DOM.settingsModal) fecharModal();
+    });
+  }
+
+  if (DOM.voiceSelect) {
+    DOM.voiceSelect.addEventListener('change', () => {
+      const voz = obterVozTemp();
+      if (voz) {
+        configTemp.voiceName = voz.name;
+        configTemp.voiceLang = voz.lang;
+      }
+      somClique();
+    });
+  }
+
+  if (DOM.rateRange) {
+    DOM.rateRange.addEventListener('input', () => {
+      configTemp.rate = parseFloat(DOM.rateRange.value);
+      atualizarLabels();
+    });
+  }
+
+  if (DOM.pitchRange) {
+    DOM.pitchRange.addEventListener('input', () => {
+      configTemp.pitch = parseFloat(DOM.pitchRange.value);
+      atualizarLabels();
+    });
+  }
+
+  if (DOM.volumeRange) {
+    DOM.volumeRange.addEventListener('input', () => {
+      configTemp.volume = parseFloat(DOM.volumeRange.value);
+      atualizarLabels();
+    });
+  }
+
+  if (DOM.timerAtivoCheck) {
+    DOM.timerAtivoCheck.addEventListener('change', () => {
+      configTemp.timerAtivo = DOM.timerAtivoCheck.checked;
+      if (DOM.tempoFieldGroup) {
+        DOM.tempoFieldGroup.classList.toggle('disabled', !configTemp.timerAtivo);
+      }
+      somClique();
+    });
+  }
+
+  if (DOM.tempoRange) {
+    DOM.tempoRange.addEventListener('input', () => {
+      configTemp.tempoPergunta = parseInt(DOM.tempoRange.value, 10);
+      atualizarLabels();
+    });
+  }
+
+  if (DOM.testVoiceBtn) {
+    DOM.testVoiceBtn.addEventListener('click', () => {
+      const voz = obterVozTemp();
+      if (voz) {
+        configTemp.voiceName = voz.name;
+        configTemp.voiceLang = voz.lang;
+      }
+      falar('Esta é uma demonstração da voz escolhida. Um, dois, três, testando.',
+            { useTemp: true });
+    });
+  }
+
+  if (DOM.resetConfigBtn) {
+    DOM.resetConfigBtn.addEventListener('click', () => {
+      configTemp = {
+        voiceName: null, voiceLang: null,
+        rate: 1, pitch: 1, volume: 1,
+        timerAtivo: true, tempoPergunta: 30
+      };
+      selecionarVozNoSelect(null, null);
+      if (DOM.rateRange) DOM.rateRange.value = 1;
+      if (DOM.pitchRange) DOM.pitchRange.value = 1;
+      if (DOM.volumeRange) DOM.volumeRange.value = 1;
+      if (DOM.timerAtivoCheck) DOM.timerAtivoCheck.checked = true;
+      if (DOM.tempoRange) DOM.tempoRange.value = 30;
+      if (DOM.tempoFieldGroup) DOM.tempoFieldGroup.classList.remove('disabled');
+      atualizarLabels();
+      somClique();
+    });
+  }
+
+  if (DOM.saveBtn) {
+    DOM.saveBtn.addEventListener('click', () => {
+      const voz = obterVozTemp();
+      if (voz) {
+        configTemp.voiceName = voz.name;
+        configTemp.voiceLang = voz.lang;
+      }
+      configAtiva = { ...configTemp };
+      salvarConfig();
+      fecharModal();
+      mostrarToast('✓ Configurações salvas!');
+      somAcerto();
+
+      if (!Estado.answered && Estado.quizData) iniciarTimer();
+    });
+  }
+}
+
+
+================================================================================
+ARQUIVO: final\js\modal-sobre.js
+================================================================================
+
+// ============ MODAL SOBRE ============
+
+function abrirAbout() {
+  if (DOM.aboutModal) DOM.aboutModal.classList.add('show');
+  somClique();
+}
+
+function fecharAbout() {
+  if (DOM.aboutModal) DOM.aboutModal.classList.remove('show');
+}
+
+function iniciais(nome) {
+  return nome.trim().split(/\s+/).slice(0, 2)
+    .map(p => p[0] ? p[0].toUpperCase() : '').join('');
+}
+
+function criarLinks(pessoa) {
+  const links = [];
+  if (pessoa.linkedin && pessoa.linkedin.trim() !== '') {
+    links.push(`<a class="about-link linkedin" href="${pessoa.linkedin}" target="_blank" rel="noopener" title="LinkedIn de ${pessoa.nome}">in</a>`);
+  }
+  if (pessoa.lattes && pessoa.lattes.trim() !== '') {
+    links.push(`<a class="about-link lattes" href="${pessoa.lattes}" target="_blank" rel="noopener" title="Lattes de ${pessoa.nome}">CV</a>`);
+  }
+  return links.length ? `<div class="about-links">${links.join('')}</div>` : '';
+}
+
+function criarPessoa(pessoa, isProfessor = false) {
+  const avatarClass = isProfessor ? 'about-avatar professor' : 'about-avatar';
+  return `
+    <div class="about-pessoa">
+      <div class="about-pessoa-info">
+        <div class="${avatarClass}">${iniciais(pessoa.nome)}</div>
+        <div class="about-pessoa-nome">${pessoa.nome}</div>
+      </div>
+      ${criarLinks(pessoa)}
+    </div>
+  `;
+}
+
+function renderizarSobre(data) {
+  const professorHTML = data.professor ? `
+    <div class="about-secao">
+      <div class="about-secao-titulo">${data.professor.titulo || 'Professor'}</div>
+      ${criarPessoa(data.professor, true)}
+    </div>` : '';
+
+  const alunosHTML = (data.alunos && data.alunos.length) ? `
+    <div class="about-secao">
+      <div class="about-secao-titulo">Alunos</div>
+      ${data.alunos.map(a => criarPessoa(a, false)).join('')}
+    </div>` : '';
+
+  if (DOM.aboutBody) {
+    DOM.aboutBody.innerHTML = `
+      <div>
+        <div class="about-titulo">${data.titulo || 'Sobre o Projeto'}</div>
+        <div class="about-descricao">${data.descricao || ''}</div>
+      </div>
+      ${professorHTML}
+      ${alunosHTML}
+      ${data.rodape ? `<div class="about-rodape">${data.rodape}</div>` : ''}
+    `;
+  }
+}
+
+function configurarEventosModalSobre() {
+  if (DOM.aboutBtn) DOM.aboutBtn.addEventListener('click', abrirAbout);
+  if (DOM.aboutCloseBtn) DOM.aboutCloseBtn.addEventListener('click', fecharAbout);
+  if (DOM.aboutOkBtn) DOM.aboutOkBtn.addEventListener('click', fecharAbout);
+  if (DOM.aboutModal) {
+    DOM.aboutModal.addEventListener('click', e => {
+      if (e.target === DOM.aboutModal) fecharAbout();
+    });
+  }
+}
+
+// Atalho ESC global fecha qualquer modal aberto
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (DOM.settingsModal && DOM.settingsModal.classList.contains('show')) fecharModal();
+    if (DOM.aboutModal && DOM.aboutModal.classList.contains('show')) fecharAbout();
+  }
+});
+
+
+================================================================================
+ARQUIVO: final\js\quiz.js
+================================================================================
+
+// ============ LÓGICA DO QUIZ ============
+
+function loadQuestion() {
+  console.log('[DEBUG] loadQuestion — currentIndex:', Estado.currentIndex);
+
+  Estado.answered = false;
+  Estado.selectedIndex = null;
+
+  if (!Estado.quizData || !Estado.quizData.questions[Estado.currentIndex]) {
+    console.error('[ERRO] quizData inválido');
+    return;
+  }
+
+  const q = Estado.quizData.questions[Estado.currentIndex];
+
+  if (DOM.questionText) {
+    DOM.questionText.textContent = q.question;
+    DOM.questionText.style.animation = 'none';
+    void DOM.questionText.offsetWidth;
+    DOM.questionText.style.animation = '';
+  }
+
+  if (DOM.options) {
+    DOM.options.innerHTML = '';
+
+    q.options.forEach((opt, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'option';
+      btn.dataset.index = i;
+      const spanText = document.createElement('span');
+      spanText.textContent = opt;
+      btn.appendChild(spanText);
+      btn.addEventListener('click', () => selectOption(i, btn));
+      DOM.options.appendChild(btn);
+    });
+  }
+
+  // Reseta botões
+  if (DOM.confirmBtn) {
+    DOM.confirmBtn.style.display = 'none';
+    DOM.confirmBtn.disabled = true;
+  }
+  if (DOM.nextBtn) {
+    DOM.nextBtn.style.display = 'none';
+  }
+
+  if (DOM.progressInfo) {
+    DOM.progressInfo.textContent =
+      `Pergunta ${Estado.currentIndex + 1} de ${Estado.quizData.questions.length}`;
+  }
+  if (DOM.progressFill) {
+    DOM.progressFill.style.width =
+      `${(Estado.currentIndex / Estado.quizData.questions.length) * 100}%`;
+  }
+
+  iniciarTimer();
+}
+
+function selectOption(index, btn) {
+  if (Estado.answered) return;
+
+  btn.classList.add('rippling');
+  setTimeout(() => btn.classList.remove('rippling'), 600);
+
+  document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+  btn.classList.add('selected');
+  Estado.selectedIndex = index;
+
+  somClique();
+
+  const textoAlternativa = Estado.quizData.questions[Estado.currentIndex].options[index];
+  falar(textoAlternativa);
+
+  if (DOM.confirmBtn) {
+    DOM.confirmBtn.disabled = false;
+    DOM.confirmBtn.style.display = 'block';
+  }
+}
+
+function confirmarResposta() {
+  const btnConfirm = document.getElementById('confirmBtn');
+  const btnNext = document.getElementById('nextBtn');
+
+  if (!btnConfirm || !btnNext) {
+    console.error('[ERRO CRÍTICO] Botões não encontrados no DOM!');
+    return;
+  }
+
+  if (Estado.answered || Estado.selectedIndex === null || !Estado.quizData) return;
+
+  Estado.answered = true;
+  pararTimer();
+  speechSynthesis.cancel();
+
+  const q = Estado.quizData.questions[Estado.currentIndex];
+  const allOptions = document.querySelectorAll('.option');
+  const btnClicado = allOptions[Estado.selectedIndex];
+
+  let cx = window.innerWidth / 2;
+  let cy = window.innerHeight / 2;
+  if (btnClicado) {
+    const rect = btnClicado.getBoundingClientRect();
+    cx = rect.left + rect.width / 2;
+    cy = rect.top + rect.height / 2;
+  }
+
+  allOptions.forEach(o => {
+    o.classList.add('disabled');
+    o.classList.remove('selected');
+  });
+
+  const acertou = Estado.selectedIndex === q.correct;
+
+  if (acertou) {
+    allOptions[q.correct].classList.add('correct');
+    allOptions[q.correct].querySelector('span')
+      .insertAdjacentHTML('afterend', '<span class="icon">✔</span>');
+
+    Estado.combo++;
+    Estado.score++;
+
+    if (DOM.scoreBadge) {
+      DOM.scoreBadge.textContent = `⭐ ${Estado.score} pts`;
+      DOM.scoreBadge.classList.add('bump');
+      setTimeout(() => DOM.scoreBadge.classList.remove('bump'), 700);
+    }
+
+    somAcerto();
+    screenFlash('green');
+    celebraContainer();
+    explodirParticulas(cx, cy, 35);
+    burstConfetti(40);
+    mostrarPontosFlutuantes(cx, cy - 30, '+1', '#38ef7d');
+
+    if (Estado.combo >= 2) {
+      setTimeout(() => {
+        mostrarCombo(Estado.combo);
+        somCombo(Estado.combo);
+        if (Estado.combo >= 3) burstConfetti(30);
+      }, 300);
+    }
+  } else {
+    Estado.combo = 0;
+
+    allOptions[q.correct].classList.add('correct');
+    allOptions[q.correct].querySelector('span')
+      .insertAdjacentHTML('afterend', '<span class="icon">✔</span>');
+
+    allOptions[Estado.selectedIndex].classList.add('wrong');
+    allOptions[Estado.selectedIndex].querySelector('span')
+      .insertAdjacentHTML('afterend', '<span class="icon">✖</span>');
+
+    somErro();
+    screenFlash('red');
+    screenShake();
+    tremeContainer();
+    explodirParticulas(cx, cy, 15, ['#96100E', '#d4181a', '#D66C25']);
+  }
+
+  const msg = acertou
+    ? 'Resposta correta! Parabéns!'
+    : `Resposta incorreta. A resposta correta é: ${q.options[q.correct]}`;
+  setTimeout(() => falar(msg), acertou ? 500 : 400);
+
+  if (DOM.progressFill) {
+    DOM.progressFill.style.width =
+      `${((Estado.currentIndex + 1) / Estado.quizData.questions.length) * 100}%`;
+  }
+
+  // Esconde confirmar
+  btnConfirm.style.display = 'none';
+  btnConfirm.disabled = true;
+
+  // Mostra próxima
+  btnNext.textContent = Estado.currentIndex === Estado.quizData.questions.length - 1
+    ? 'Ver Resultado 🏁'
+    : 'Próxima ➜';
+  btnNext.disabled = false;
+  btnNext.style.display = 'block';
+  btnNext.style.opacity = '1';
+  btnNext.style.pointerEvents = 'auto';
+  btnNext.style.transform = 'translateY(0)';
+}
+
+function irParaProxima() {
+  console.log('[DEBUG] irParaProxima. currentIndex antes:', Estado.currentIndex);
+
+  speechSynthesis.cancel();
+  pararTimer();
+
+  Estado.currentIndex++;
+  console.log('[DEBUG] currentIndex depois:', Estado.currentIndex);
+
+  if (Estado.currentIndex < Estado.quizData.questions.length) {
+    loadQuestion();
+  } else {
+    showResult();
+  }
+}
+
+function showResult() {
+  pararTimer();
+  if (DOM.quizContent) DOM.quizContent.classList.add('hidden');
+  if (DOM.resultScreen) DOM.resultScreen.classList.remove('hidden');
+
+  const total = Estado.quizData.questions.length;
+  const percent = (Estado.score / total) * 100;
+
+  if (DOM.finalScore) DOM.finalScore.textContent = `${Estado.score} / ${total}`;
+
+  const emoji = DOM.resultEmoji;
+  const msg = DOM.resultMessage;
+
+  if (percent === 100) {
+    if (emoji) emoji.textContent = '🏆';
+    if (msg) msg.textContent = 'PERFEITO! Você é um MESTRE! 🌟';
+    burstConfetti(200);
+    setTimeout(() => burstConfetti(150), 400);
+    setTimeout(() => burstConfetti(100), 800);
+    somVitoria();
+    screenFlash('green');
+    for (let i = 0; i < 5; i++) {
+      setTimeout(() => {
+        explodirParticulas(
+          window.innerWidth * Math.random(),
+          window.innerHeight * Math.random(),
+          25
+        );
+      }, i * 200);
+    }
+  } else if (percent >= 70) {
+    if (emoji) emoji.textContent = '🎉';
+    if (msg) msg.textContent = 'Muito bem! Excelente desempenho!';
+    burstConfetti(100);
+    setTimeout(() => burstConfetti(80), 400);
+    somVitoria();
+  } else if (percent >= 40) {
+    if (emoji) emoji.textContent = '👍';
+    if (msg) msg.textContent = 'Bom trabalho! Continue praticando.';
+    somAcerto();
+  } else {
+    if (emoji) emoji.textContent = '📚';
+    if (msg) msg.textContent = 'Continue estudando, você vai melhorar!';
+    somDerrota();
+  }
+
+  if (DOM.progressFill) DOM.progressFill.style.width = '100%';
+  if (DOM.progressInfo) DOM.progressInfo.textContent = 'Concluído!';
+}
+
+function reiniciarQuiz() {
+  speechSynthesis.cancel();
+  pararTimer();
+
+  Estado.currentIndex = 0;
+  Estado.score = 0;
+  Estado.combo = 0;
+  Estado.answered = false;
+  Estado.selectedIndex = null;
+
+  if (DOM.scoreBadge) DOM.scoreBadge.textContent = '⭐ 0 pts';
+  if (DOM.progressFill) DOM.progressFill.style.width = '0%';
+  if (DOM.resultScreen) DOM.resultScreen.classList.add('hidden');
+  if (DOM.quizContent) DOM.quizContent.classList.remove('hidden');
+
+  somClique();
+  loadQuestion();
+}
+
+// ============ EVENTOS ============
+function configurarEventosQuiz() {
+  if (DOM.confirmBtn) DOM.confirmBtn.addEventListener('click', confirmarResposta);
+  if (DOM.nextBtn) DOM.nextBtn.addEventListener('click', irParaProxima);
+  if (DOM.restartBtn) DOM.restartBtn.addEventListener('click', reiniciarQuiz);
+
+  // Botão de som
+  if (DOM.soundBtn) {
+    DOM.soundBtn.addEventListener('click', () => {
+      Estado.somAtivado = !Estado.somAtivado;
+      salvarSom();
+      atualizarBotaoSom();
+
+      if (Estado.somAtivado) {
+        somClique();
+        mostrarToast('🔊 Som ligado');
+      } else {
+        speechSynthesis.cancel();
+        mostrarToast('🔇 Som desligado');
+      }
+    });
+  }
+
+  // Botão "ouvir pergunta"
+  if (DOM.speakBtn) {
+    DOM.speakBtn.addEventListener('click', () => {
+      if (!('speechSynthesis' in window)) return;
+      if (!Estado.somAtivado) {
+        mostrarToast('🔇 Ative o som para ouvir');
+        return;
+      }
+      speechSynthesis.cancel();
+
+      if (DOM.speakBtn.classList.contains('speaking')) {
+        DOM.speakBtn.classList.remove('speaking');
+        return;
+      }
+
+      const q = Estado.quizData.questions[Estado.currentIndex];
+      let texto = `Pergunta ${Estado.currentIndex + 1}. ${q.question}. As alternativas são: `;
+      q.options.forEach((opt, i) => { texto += `Alternativa ${i + 1}: ${opt}. `; });
+
+      const utter = falar(texto, { onend: () => DOM.speakBtn.classList.remove('speaking') });
+      if (utter) {
+        utter.onstart = () => DOM.speakBtn.classList.add('speaking');
+        utter.onerror = () => DOM.speakBtn.classList.remove('speaking');
+      }
+    });
+  }
+}
+
+
+================================================================================
+ARQUIVO: final\js\storage.js
+================================================================================
+
+// ============ LOCALSTORAGE ============
+
+function carregarConfig() {
+  try {
+    const salvo = localStorage.getItem(STORAGE_KEY);
+    if (salvo) configAtiva = { ...configAtiva, ...JSON.parse(salvo) };
+  } catch (e) { console.warn('[storage] Erro ao ler config:', e); }
+}
+
+function salvarConfig() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(configAtiva));
+  } catch (e) { console.warn('[storage] Erro ao salvar config:', e); }
+}
+
+function carregarSom() {
+  try {
+    const salvo = localStorage.getItem(STORAGE_SOM);
+    if (salvo !== null) Estado.somAtivado = salvo === 'true';
+  } catch (e) { console.warn('[storage] Erro ao ler som:', e); }
+  atualizarBotaoSom();
+}
+
+function salvarSom() {
+  try {
+    localStorage.setItem(STORAGE_SOM, Estado.somAtivado ? 'true' : 'false');
+  } catch (e) { console.warn('[storage] Erro ao salvar som:', e); }
+}
+
+function atualizarBotaoSom() {
+  if (!DOM.soundBtn) return;
+  if (Estado.somAtivado) {
+    DOM.soundBtn.textContent = '🔊';
+    DOM.soundBtn.classList.remove('muted');
+    DOM.soundBtn.title = 'Som ligado — clique para desligar';
+  } else {
+    DOM.soundBtn.textContent = '🔇';
+    DOM.soundBtn.classList.add('muted');
+    DOM.soundBtn.title = 'Som desligado — clique para ligar';
+  }
+}
+
+function mostrarToast(msg) {
+  if (!DOM.toast) return;
+  DOM.toast.textContent = msg;
+  DOM.toast.classList.add('show');
+  setTimeout(() => DOM.toast.classList.remove('show'), 2200);
+}
+
+
+================================================================================
+ARQUIVO: final\js\timer.js
+================================================================================
+
+// ============ TIMER REGRESSIVO ============
+
+function iniciarTimer() {
+  pararTimer();
+
+  if (!configAtiva.timerAtivo) {
+    if (DOM.timerBar) DOM.timerBar.style.display = 'none';
+    if (DOM.timerLabel) DOM.timerLabel.style.display = 'none';
+    return;
+  }
+  if (DOM.timerBar) DOM.timerBar.style.display = 'block';
+  if (DOM.timerLabel) DOM.timerLabel.style.display = 'block';
+
+  Estado.timeLeft = configAtiva.tempoPergunta;
+  atualizarTimerUI();
+
+  Estado.timerInterval = setInterval(() => {
+    Estado.timeLeft -= 0.1;
+    if (Estado.timeLeft <= 0) {
+      Estado.timeLeft = 0;
+      atualizarTimerUI();
+      pararTimer();
+      tempoEsgotado();
+    } else {
+      atualizarTimerUI();
+      if (Estado.timeLeft <= 5 && Math.abs((Estado.timeLeft * 10) % 10) < 0.5) {
+        somTique();
+      }
+    }
+  }, 100);
+}
+
+function pararTimer() {
+  if (Estado.timerInterval) {
+    clearInterval(Estado.timerInterval);
+    Estado.timerInterval = null;
+  }
+}
+
+function atualizarTimerUI() {
+  if (!configAtiva.timerAtivo) return;
+  if (!DOM.timerFill || !DOM.timerLabel) return;
+
+  const pct = (Estado.timeLeft / configAtiva.tempoPergunta) * 100;
+  DOM.timerFill.style.width = pct + '%';
+  DOM.timerLabel.textContent = `⏱️ ${Math.ceil(Estado.timeLeft)}s`;
+
+  DOM.timerFill.classList.remove('warning', 'danger');
+  DOM.timerLabel.classList.remove('warning', 'danger');
+
+  if (pct <= 20) {
+    DOM.timerFill.classList.add('danger');
+    DOM.timerLabel.classList.add('danger');
+  } else if (pct <= 50) {
+    DOM.timerFill.classList.add('warning');
+    DOM.timerLabel.classList.add('warning');
+  }
+}
+
+function tempoEsgotado() {
+  if (Estado.answered) return;
+  Estado.answered = true;
+  Estado.combo = 0;
+
+  speechSynthesis.cancel();
+  somTempoEsgotado();
+  flashTimeUp();
+  screenFlash('red');
+  screenShake();
+  tremeContainer();
+
+  const q = Estado.quizData.questions[Estado.currentIndex];
+  const allOptions = document.querySelectorAll('.option');
+
+  allOptions.forEach(o => {
+    o.classList.add('disabled');
+    o.classList.remove('selected');
+  });
+
+  allOptions[q.correct].classList.add('correct');
+  allOptions[q.correct].querySelector('span')
+    .insertAdjacentHTML('afterend', '<span class="icon">✔</span>');
+
+  setTimeout(() => {
+    falar(`Tempo esgotado! A resposta correta é: ${q.options[q.correct]}`);
+  }, 400);
+
+  if (DOM.progressFill) {
+    DOM.progressFill.style.width =
+      `${((Estado.currentIndex + 1) / Estado.quizData.questions.length) * 100}%`;
+  }
+
+  // Esconde confirmar
+  if (DOM.confirmBtn) {
+    DOM.confirmBtn.style.display = 'none';
+    DOM.confirmBtn.disabled = true;
+  }
+
+  // Mostra próxima
+  if (DOM.nextBtn) {
+    DOM.nextBtn.textContent = Estado.currentIndex === Estado.quizData.questions.length - 1
+      ? 'Ver Resultado 🏁'
+      : 'Próxima ➜';
+    DOM.nextBtn.disabled = false;
+    DOM.nextBtn.style.display = 'block';
+    DOM.nextBtn.style.opacity = '1';
+    DOM.nextBtn.style.pointerEvents = 'auto';
+    DOM.nextBtn.style.transform = 'translateY(0)';
+  }
+}
+
+
+================================================================================
+ARQUIVO: final\js\voz.js
+================================================================================
+
+// ============ VOZ (SpeechSynthesis) ============
+// Só lista locutores em português (pt-BR, pt-PT, pt-*)
+
+function listarVozes() {
+  const todasVozes = speechSynthesis.getVoices();
+  if (todasVozes.length === 0) return;
+
+  // Filtra APENAS português
+  const vozesPT = todasVozes.filter(v => v.lang.toLowerCase().startsWith('pt'));
+
+  // Se não achou nenhuma voz PT, avisa e mantém vazio
+  if (vozesPT.length === 0) {
+    console.warn('[voz] Nenhuma voz em português encontrada neste navegador.');
+    Estado.vozesDisponiveis = [];
+
+    if (DOM.voiceSelect) {
+      DOM.voiceSelect.innerHTML = '';
+      const opt = document.createElement('option');
+      opt.textContent = 'Nenhuma voz em português disponível';
+      opt.disabled = true;
+      opt.selected = true;
+      DOM.voiceSelect.appendChild(opt);
+    }
+    return;
+  }
+
+  // Ordena: pt-BR primeiro, depois outros pt
+  const ptBR = vozesPT.filter(v => v.lang.toLowerCase() === 'pt-br');
+  const ptOutros = vozesPT.filter(v => v.lang.toLowerCase() !== 'pt-br');
+  Estado.vozesDisponiveis = [...ptBR, ...ptOutros];
+
+  if (!DOM.voiceSelect) return;
+
+  DOM.voiceSelect.innerHTML = '';
+  Estado.vozesDisponiveis.forEach((voz, i) => {
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = `${voz.name} — ${voz.lang}`;
+    DOM.voiceSelect.appendChild(opt);
+  });
+
+  const modalAberto = DOM.settingsModal && DOM.settingsModal.classList.contains('show');
+  if (modalAberto) {
+    selecionarVozNoSelect(configTemp.voiceName, configTemp.voiceLang);
+  } else {
+    selecionarVozNoSelect(configAtiva.voiceName, configAtiva.voiceLang);
+  }
+}
+
+function selecionarVozNoSelect(name, lang) {
+  if (!DOM.voiceSelect || Estado.vozesDisponiveis.length === 0) return;
+
+  if (!name) {
+    // Sem voz salva — pega a primeira pt-BR, ou a primeira da lista
+    const idx = Estado.vozesDisponiveis.findIndex(v => v.lang.toLowerCase() === 'pt-br');
+    DOM.voiceSelect.selectedIndex = idx >= 0 ? idx : 0;
+    return;
+  }
+
+  let idx = Estado.vozesDisponiveis.findIndex(v => v.name === name && v.lang === lang);
+  if (idx === -1) idx = Estado.vozesDisponiveis.findIndex(v => v.name === name);
+  if (idx === -1) idx = Estado.vozesDisponiveis.findIndex(v => v.lang.toLowerCase() === 'pt-br');
+  DOM.voiceSelect.selectedIndex = idx >= 0 ? idx : 0;
+}
+
+function obterVozAtiva() {
+  if (Estado.vozesDisponiveis.length === 0) return null;
+
+  if (!configAtiva.voiceName) {
+    return Estado.vozesDisponiveis.find(v => v.lang.toLowerCase() === 'pt-br')
+        || Estado.vozesDisponiveis[0];
+  }
+  return Estado.vozesDisponiveis.find(v => v.name === configAtiva.voiceName && v.lang === configAtiva.voiceLang)
+      || Estado.vozesDisponiveis.find(v => v.name === configAtiva.voiceName)
+      || Estado.vozesDisponiveis.find(v => v.lang.toLowerCase() === 'pt-br')
+      || Estado.vozesDisponiveis[0];
+}
+
+function obterVozTemp() {
+  if (!DOM.voiceSelect || Estado.vozesDisponiveis.length === 0) return null;
+  return Estado.vozesDisponiveis[DOM.voiceSelect.selectedIndex] || null;
+}
+
+function falar(texto, opts = {}) {
+  if (!('speechSynthesis' in window)) return null;
+  if (!Estado.somAtivado) return null;
+
+  const cfg = opts.useTemp ? configTemp : configAtiva;
+  const voz = opts.useTemp ? obterVozTemp() : obterVozAtiva();
+
+  speechSynthesis.cancel();
+
+  const utter = new SpeechSynthesisUtterance(texto);
+  if (voz) utter.voice = voz;
+  utter.lang = voz ? voz.lang : 'pt-BR';
+  utter.rate = cfg.rate;
+  utter.pitch = cfg.pitch;
+  utter.volume = cfg.volume;
+  if (opts.onend) utter.onend = opts.onend;
+
+  speechSynthesis.speak(utter);
+  return utter;
+}
+
+
+================================================================================
+ARQUIVO: final\questoes.json
+================================================================================
+
+{
+  "questions": [
+    {
+      "question": "Meu cachorro tem vermes. Que doença ele pode transmitir para mim?",
+      "options": [
+        "Sarna",
+        "Bicho geográfico"
+      ],
+      "correct": 1
+    },
+    {
+      "question": "Estou com muita coceira no corpo todo. Meu cachorro também. Que doença pode ser?",
+      "options": [
+        "Sarna",
+        "Verme intestinal"
+      ],
+      "correct": 0
+    },
+    {
+      "question": "Vermes intestinais de cachorros podem causar, em pessoas:",
+      "options": [
+        "Apenas diarreia, pois ficam no intestino",
+        "Bicho geográfico",
+        "Infestação das vísceras com suas larvas"
+      ],
+      "correct": 2
+    },
+    {
+      "question": "Pulga pode transmitir verme para o cachorro e para mim?",
+      "options": [
+        "Só se engolir a pulga",
+        "Sim, pela picada"
+      ],
+      "correct": 0
+    },
+    {
+      "question": "Todo cachorro vai transmitir bicho geográfico para mim?",
+      "options": [
+        "Só se estiver com vermes",
+        "Sim! Fuja de todos os cachorros!"
+      ],
+      "correct": 0
+    },
+    {
+      "question": "Meu cachorro pode passar diarreia para mim?",
+      "options": [
+        "Sim, se ele estiver com protozoários causadores de diarreia",
+        "Sim, se ele estiver com vermes",
+        "Não"
+      ],
+      "correct": 0
+    },
+    {
+      "question": "Como posso evitar de pegar doenças dos meus cachorros e gatos?",
+      "options": [
+        "Recolhendo o cocô do chão diariamente",
+        "Vermifugando meu cachorro e meu gato",
+        "Evitando andar descalço na terra/areia",
+        "Bebendo água tratada",
+        "Doando meus animaizinhos e ficando longe de qualquer tipo de bicho"
+      ],
+      "correct": 0
+    },
+    {
+      "question": "Preciso doar todos os meus animais para ficar seguro?",
+      "options": [
+        "Sim, o quanto antes!",
+        "Não! Dê vermífugo para seus bichinhos, recolha o cocô, lave sempre as mãos após brincar e seja feliz!"
+      ],
+      "correct": 1
+    }
+  ]
+}
+
+
+================================================================================
+ARQUIVO: final\sobre.json
+================================================================================
+
+{
+  "titulo": "Sobre o Projeto",
+  "descricao": "Sistema desenvolvido para a disciplina de Extensão em Pós-Graduação de Engenharia Biomédica.",
+  "professor": {
+    "titulo": "Professor",
+    "nome": "Mario",
+    "lattes": "http://lattes.cnpq.br/0000000000000000",
+    "linkedin": "https://www.linkedin.com/in/mario-exemplo"
+  },
+  "alunos": [
+    {
+      "nome": "aluno01",
+      "lattes": "http://lattes.cnpq.br/1111111111111111",
+      "linkedin": "https://www.linkedin.com/in/exemplo"
+    },
+    {
+      "nome": "aluno02",
+      "lattes": "http://lattes.cnpq.br/2222222222222222",
+      "linkedin": "https://www.linkedin.com/in/exemplo"
+    }
+  ],
+  "rodape": "© 2025 - Todos os direitos reservados"
+}
+
+
+================================================================================
+ARQUIVO: teste\index.html
+================================================================================
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Quiz Interativo 🎉</title>
+  <link rel="stylesheet" href="style.css?v=5">
+</head>
+<body>
+
+  <div class="page-wrapper">
+
+    <header class="brand-header">
+      <img src="logo.png" alt="Logo Univap" class="brand-logo">
+    </header>
+
+    <div class="quiz-container" id="quizContainer">
+      <div id="loading" class="loading">⏳ Carregando perguntas...</div>
+
+      <div id="quizMain" class="hidden">
+        <div class="quiz-header">
+          <span class="progress-info" id="progressInfo">Pergunta 1 de 5</span>
+          <div class="header-right">
+            <button class="icon-btn" id="soundBtn" title="Ligar/desligar som">🔊</button>
+            <button class="icon-btn" id="aboutBtn" title="Sobre">ℹ️</button>
+            <button class="icon-btn" id="settingsBtn" title="Configurações">⚙️</button>
+            <span class="score-badge" id="scoreBadge">⭐ 0 pts</span>
+          </div>
+        </div>
+
+        <div class="timer-bar" id="timerBar">
+          <div class="timer-fill" id="timerFill"></div>
+        </div>
+        <div class="timer-label" id="timerLabel">⏱️ 30s</div>
+
+        <div id="quizContent">
+          <div class="question-box">
+            <div class="question-text" id="questionText"></div>
+            <button class="speak-btn" id="speakBtn" title="Ouvir pergunta">🔊</button>
+          </div>
+          <div class="options" id="options"></div>
+          <div class="btn-group">
+            <button class="confirm-btn" id="confirmBtn" disabled>✅ Confirmar Resposta</button>
+            <button class="next-btn" id="nextBtn">Próxima ➜</button>
+          </div>
+        </div>
+
+        <div class="result-screen hidden" id="resultScreen">
+          <div class="result-emoji" id="resultEmoji">🎉</div>
+          <h2>Quiz Completo!</h2>
+          <p>Sua pontuação final:</p>
+          <div class="result-score" id="finalScore">0 / 0</div>
+          <p id="resultMessage"></p>
+          <button class="restart-btn" id="restartBtn">🔄 Jogar Novamente</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="modal-overlay" id="settingsModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>⚙️ Configurações</h2>
+        <button class="modal-close" id="modalCloseBtn" title="Fechar">✕</button>
+      </div>
+      <div class="modal-body">
+
+        <div class="section-title">🎮 Jogo</div>
+
+        <div class="field-group">
+          <label>
+            <input type="checkbox" id="timerAtivoCheck" class="check-input">
+            Usar tempo por pergunta
+          </label>
+        </div>
+
+        <div class="field-group" id="tempoFieldGroup">
+          <label for="tempoRange">Tempo por pergunta <span class="val" id="tempoValue">30s</span></label>
+          <input type="range" id="tempoRange" class="range-input" min="10" max="90" step="5" value="30">
+        </div>
+
+        <div class="section-title">🎙️ Locutor</div>
+
+        <div class="field-group">
+          <label for="voiceSelect">Voz</label>
+          <select id="voiceSelect" class="voice-select"></select>
+        </div>
+        <div class="field-group">
+          <label for="rateRange">Velocidade <span class="val" id="rateValue">1.00x</span></label>
+          <input type="range" id="rateRange" class="range-input" min="0.5" max="2" step="0.05" value="1">
+        </div>
+        <div class="field-group">
+          <label for="pitchRange">Tom <span class="val" id="pitchValue">1.00</span></label>
+          <input type="range" id="pitchRange" class="range-input" min="0.5" max="2" step="0.05" value="1">
+        </div>
+        <div class="field-group">
+          <label for="volumeRange">Volume <span class="val" id="volumeValue">100%</span></label>
+          <input type="range" id="volumeRange" class="range-input" min="0" max="1" step="0.05" value="1">
+        </div>
+
+        <div class="test-row">
+          <button class="test-voice-btn" id="testVoiceBtn">🔊 Testar voz</button>
+          <button class="reset-btn" id="resetConfigBtn" title="Restaurar padrões">↺ Padrões</button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn cancel" id="cancelBtn">Cancelar</button>
+        <button class="modal-btn save" id="saveBtn">💾 Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="aboutModal">
+    <div class="modal about-modal">
+      <div class="modal-header">
+        <h2>ℹ️ Sobre o Projeto</h2>
+        <button class="modal-close" id="aboutCloseBtn" title="Fechar">✕</button>
+      </div>
+      <div class="modal-body about-body" id="aboutBody"></div>
+      <div class="modal-footer">
+        <button class="modal-btn save" id="aboutOkBtn">Entendi</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">✓ Configurações salvas!</div>
+
+  <script src="script.js?v=5"></script>
+</body>
+</html>
+
+
+================================================================================
+ARQUIVO: teste\questoes.json
+================================================================================
+
+{
+  "questions": [
+    {
+      "question": "O que são zoonoses?",
+      "options": [
+        "Doenças exclusivas de animais silvestres",
+        "Doenças transmitidas entre animais e seres humanos",
+        "Doenças causadas apenas por vírus",
+        "Doenças que afetam somente crianças"
+      ],
+      "correct": 1
+    },
+    {
+      "question": "Qual é o principal hospedeiro definitivo do Toxocara canis?",
+      "options": ["Gatos", "Cães", "Seres humanos", "Pulgas"],
+      "correct": 1
+    },
+    {
+      "question": "Como o ser humano pode adquirir a infecção por Toxocara canis?",
+      "options": [
+        "Pela picada de um mosquito",
+        "Ao ingerir acidentalmente ovos presentes no solo, alimentos ou objetos contaminados",
+        "Pelo contato direto com a pele de cães infectados",
+        "Ao respirar ar contaminado em ambientes fechados"
+      ],
+      "correct": 1
+    },
+    {
+      "question": "Qual manifestação clínica está mais associada à infecção humana por Ancylostoma braziliense?",
+      "options": [
+        "Larva migrans visceral",
+        "Larva migrans ocular",
+        "Larva migrans cutânea (bicho geográfico)",
+        "Diarreia aquosa intensa"
+      ],
+      "correct": 2
+    },
+    {
+      "question": "Como as larvas de Ancylostoma braziliense penetram no organismo humano?",
+      "options": [
+        "Pela ingestão de água contaminada",
+        "Pela via respiratória",
+        "Através da pele íntegra em contato com solo ou areia contaminados",
+        "Pela picada de pulgas infectadas"
+      ],
+      "correct": 2
+    },
+    {
+      "question": "Qual é o principal hospedeiro intermediário do Dipylidium caninum?",
+      "options": ["Carrapatos", "Pulgas", "Mosquitos", "Baratas"],
+      "correct": 1
+    },
+    {
+      "question": "Como as pessoas podem adquirir a infecção por Dipylidium caninum?",
+      "options": [
+        "Ao ingerir acidentalmente uma pulga infectada",
+        "Pela penetração de larvas na pele",
+        "Ao respirar esporos presentes no ar",
+        "Pela mordida de um cão infectado"
+      ],
+      "correct": 0
+    },
+    {
+      "question": "Qual é a principal via de transmissão do Cryptosporidium spp.?",
+      "options": [
+        "Via respiratória",
+        "Via fecal-oral",
+        "Via transplacentária",
+        "Por vetores como pulgas e carrapatos"
+      ],
+      "correct": 1
+    },
+    {
+      "question": "Qual é o principal sintoma da criptosporidiose?",
+      "options": [
+        "Lesões avermelhadas na pele com aspecto sinuoso",
+        "Coceira intensa e vermelhidão pelo corpo",
+        "Diarreia aquosa intensa e frequente, podendo vir acompanhada de cólicas abdominais",
+        "Tosse seca e febre alta"
+      ],
+      "correct": 2
+    },
+    {
+      "question": "Qual parasita é conhecido como \"tênia das pulgas\"?",
+      "options": [
+        "Toxocara canis",
+        "Ancylostoma braziliense",
+        "Dipylidium caninum",
+        "Sarcoptes scabiei"
+      ],
+      "correct": 2
+    },
+    {
+      "question": "O que é o Sarcoptes scabiei?",
+      "options": [
+        "Um vírus transmitido por mosquitos",
+        "Um protozoário que causa diarreia",
+        "Um ácaro responsável por quadros de sarna em animais e pela escabiose humana",
+        "Um verme redondo que penetra pela pele"
+      ],
+      "correct": 2
+    },
+    {
+      "question": "Qual das alternativas abaixo é uma medida de prevenção recomendada para reduzir a exposição a zoonoses parasitárias?",
+      "options": [
+        "Deixar os cães e gatos soltos em parques infantis",
+        "Lavar as mãos após brincar no solo ou ter contato com animais, e recolher as fezes dos cães",
+        "Consumir água não tratada de fontes naturais",
+        "Evitar qualquer contato com animais domésticos"
+      ],
+      "correct": 1
+    }
+  ]
+}
+
+
+================================================================================
+ARQUIVO: teste\script.js
+================================================================================
+
+// ============ ESTADO ============
+let quizData = null;
+let sobreData = null;
+let currentIndex = 0;
+let score = 0;
+let answered = false;
+let selectedIndex = null;
+let synth = window.speechSynthesis;
+let vozesDisponiveis = [];
+let combo = 0;
+let audioCtx = null;
+
+let timerInterval = null;
+let timeLeft = 0;
+
+let somAtivado = true;
+
+let configAtiva = {
+  voiceName: null,
+  voiceLang: null,
+  rate: 1,
+  pitch: 1,
+  volume: 1,
+  timerAtivo: true,
+  tempoPergunta: 30
+};
+let configTemp = { ...configAtiva };
+
+const STORAGE_KEY = 'quizVoiceConfig';
+const STORAGE_SOM = 'quizSomAtivado';
+
+// ============ ELEMENTOS ============
+const loadingEl = document.getElementById('loading');
+const quizMain = document.getElementById('quizMain');
+const questionText = document.getElementById('questionText');
+const optionsContainer = document.getElementById('options');
+const nextBtn = document.getElementById('nextBtn');
+const confirmBtn = document.getElementById('confirmBtn');
+const progressInfo = document.getElementById('progressInfo');
+const progressFill = document.getElementById('progressFill');
+const scoreBadge = document.getElementById('scoreBadge');
+const speakBtn = document.getElementById('speakBtn');
+const quizContent = document.getElementById('quizContent');
+const resultScreen = document.getElementById('resultScreen');
+const settingsBtn = document.getElementById('settingsBtn');
+const aboutBtn = document.getElementById('aboutBtn');
+const soundBtn = document.getElementById('soundBtn');
+const quizContainer = document.getElementById('quizContainer');
+const timerBar = document.getElementById('timerBar');
+const timerFill = document.getElementById('timerFill');
+const timerLabel = document.getElementById('timerLabel');
+
+const settingsModal = document.getElementById('settingsModal');
+const modalCloseBtn = document.getElementById('modalCloseBtn');
+const cancelBtn = document.getElementById('cancelBtn');
+const saveBtn = document.getElementById('saveBtn');
+const resetConfigBtn = document.getElementById('resetConfigBtn');
+const voiceSelect = document.getElementById('voiceSelect');
+const rateRange = document.getElementById('rateRange');
+const pitchRange = document.getElementById('pitchRange');
+const volumeRange = document.getElementById('volumeRange');
+const rateValue = document.getElementById('rateValue');
+const pitchValue = document.getElementById('pitchValue');
+const volumeValue = document.getElementById('volumeValue');
+const testVoiceBtn = document.getElementById('testVoiceBtn');
+const timerAtivoCheck = document.getElementById('timerAtivoCheck');
+const tempoRange = document.getElementById('tempoRange');
+const tempoValue = document.getElementById('tempoValue');
+const tempoFieldGroup = document.getElementById('tempoFieldGroup');
+const toast = document.getElementById('toast');
+
+const aboutModal = document.getElementById('aboutModal');
+const aboutCloseBtn = document.getElementById('aboutCloseBtn');
+const aboutOkBtn = document.getElementById('aboutOkBtn');
+const aboutBody = document.getElementById('aboutBody');
+
+console.log('[DEBUG] Elementos carregados:', {
+  nextBtn: nextBtn ? 'OK' : 'NULL',
+  confirmBtn: confirmBtn ? 'OK' : 'NULL',
+  options: optionsContainer ? 'OK' : 'NULL',
+  questionText: questionText ? 'OK' : 'NULL'
+});
+
+// ============ ÁUDIO ============
+function getAudioCtx() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+
+function tocarTom(freq, dur, type = 'sine', volume = 0.15, delay = 0) {
+  if (!somAtivado) return;
+  try {
+    const ctx = getAudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = type;
+    osc.frequency.value = freq;
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    const start = ctx.currentTime + delay;
+    gain.gain.setValueAtTime(0, start);
+    gain.gain.linearRampToValueAtTime(volume, start + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.001, start + dur);
+    osc.start(start);
+    osc.stop(start + dur);
+  } catch (e) { console.warn('Erro áudio:', e); }
+}
+
+function somAcerto() {
+  tocarTom(523.25, 0.15, 'sine', 0.18, 0);
+  tocarTom(659.25, 0.15, 'sine', 0.18, 0.08);
+  tocarTom(783.99, 0.20, 'sine', 0.18, 0.16);
+  tocarTom(1046.5, 0.35, 'sine', 0.20, 0.24);
+}
+function somErro() {
+  tocarTom(220, 0.15, 'sawtooth', 0.12, 0);
+  tocarTom(185, 0.20, 'sawtooth', 0.12, 0.10);
+  tocarTom(138.6, 0.35, 'sawtooth', 0.14, 0.22);
+}
+function somClique() { tocarTom(880, 0.06, 'square', 0.06, 0); }
+function somCombo(nivel) {
+  const base = 523.25 * Math.pow(1.12, Math.min(nivel, 8));
+  tocarTom(base, 0.1, 'triangle', 0.15, 0);
+  tocarTom(base * 1.5, 0.15, 'triangle', 0.15, 0.08);
+}
+function somVitoria() {
+  const notas = [523.25, 659.25, 783.99, 1046.5, 783.99, 1046.5, 1318.5];
+  notas.forEach((f, i) => tocarTom(f, 0.25, 'sine', 0.18, i * 0.13));
+  notas.forEach((f, i) => tocarTom(f * 0.5, 0.25, 'triangle', 0.08, i * 0.13));
+}
+function somDerrota() {
+  const notas = [392, 349.23, 293.66, 220];
+  notas.forEach((f, i) => tocarTom(f, 0.4, 'sine', 0.15, i * 0.22));
+}
+function somTempoEsgotado() {
+  tocarTom(180, 0.3, 'sawtooth', 0.18, 0);
+  tocarTom(140, 0.3, 'sawtooth', 0.18, 0.15);
+  tocarTom(100, 0.5, 'sawtooth', 0.18, 0.3);
+}
+function somTique() { tocarTom(1200, 0.04, 'square', 0.04, 0); }
+
+// ============ LOCALSTORAGE ============
+function carregarConfig() {
+  try {
+    const salvo = localStorage.getItem(STORAGE_KEY);
+    if (salvo) configAtiva = { ...configAtiva, ...JSON.parse(salvo) };
+  } catch (e) { console.warn(e); }
+}
+function salvarConfig() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(configAtiva)); } catch (e) { console.warn(e); }
+}
+function carregarSom() {
+  try {
+    const salvo = localStorage.getItem(STORAGE_SOM);
+    if (salvo !== null) somAtivado = salvo === 'true';
+  } catch (e) { console.warn(e); }
+  atualizarBotaoSom();
+}
+function salvarSom() {
+  try { localStorage.setItem(STORAGE_SOM, somAtivado ? 'true' : 'false'); } catch (e) { console.warn(e); }
+}
+function atualizarBotaoSom() {
+  if (!soundBtn) return;
+  if (somAtivado) {
+    soundBtn.textContent = '🔊';
+    soundBtn.classList.remove('muted');
+    soundBtn.title = 'Som ligado — clique para desligar';
+  } else {
+    soundBtn.textContent = '🔇';
+    soundBtn.classList.add('muted');
+    soundBtn.title = 'Som desligado — clique para ligar';
+  }
+}
+function mostrarToast(msg) {
+  if (!toast) return;
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2200);
+}
+
+// ============ VOZES ============
+function listarVozes() {
+  const vozes = speechSynthesis.getVoices();
+  if (vozes.length === 0) return;
+
+  const ptBR = vozes.filter(v => v.lang === 'pt-BR');
+  const ptOutros = vozes.filter(v => v.lang.startsWith('pt') && v.lang !== 'pt-BR');
+  const outras = vozes.filter(v => !v.lang.startsWith('pt'));
+  vozesDisponiveis = [...ptBR, ...ptOutros, ...outras];
+
+  if (voiceSelect) {
+    voiceSelect.innerHTML = '';
+    vozesDisponiveis.forEach((voz, i) => {
+      const opt = document.createElement('option');
+      opt.value = i;
+      opt.textContent = `${voz.name} — ${voz.lang}`;
+      voiceSelect.appendChild(opt);
+    });
+
+    if (settingsModal && settingsModal.classList.contains('show')) {
+      selecionarVozNoSelect(configTemp.voiceName, configTemp.voiceLang);
+    } else {
+      selecionarVozNoSelect(configAtiva.voiceName, configAtiva.voiceLang);
+    }
+  }
+}
+
+function selecionarVozNoSelect(name, lang) {
+  if (!voiceSelect) return;
+  if (!name) {
+    const idx = vozesDisponiveis.findIndex(v => v.lang === 'pt-BR');
+    voiceSelect.selectedIndex = idx >= 0 ? idx : 0;
+    return;
+  }
+  let idx = vozesDisponiveis.findIndex(v => v.name === name && v.lang === lang);
+  if (idx === -1) idx = vozesDisponiveis.findIndex(v => v.name === name);
+  if (idx === -1) idx = vozesDisponiveis.findIndex(v => v.lang === 'pt-BR');
+  voiceSelect.selectedIndex = idx >= 0 ? idx : 0;
+}
+
+function obterVozAtiva() {
+  if (!configAtiva.voiceName) return vozesDisponiveis.find(v => v.lang === 'pt-BR') || vozesDisponiveis[0] || null;
+  return vozesDisponiveis.find(v => v.name === configAtiva.voiceName && v.lang === configAtiva.voiceLang)
+      || vozesDisponiveis.find(v => v.name === configAtiva.voiceName)
+      || vozesDisponiveis.find(v => v.lang === 'pt-BR')
+      || vozesDisponiveis[0] || null;
+}
+function obterVozTemp() { return voiceSelect ? (vozesDisponiveis[voiceSelect.selectedIndex] || null) : null; }
+
+function falar(texto, opts = {}) {
+  if (!('speechSynthesis' in window)) return null;
+  if (!somAtivado) return null;
+  const cfg = opts.useTemp ? configTemp : configAtiva;
+  const voz = opts.useTemp ? obterVozTemp() : obterVozAtiva();
+  synth.cancel();
+  const utter = new SpeechSynthesisUtterance(texto);
+  if (voz) utter.voice = voz;
+  utter.lang = voz ? voz.lang : 'pt-BR';
+  utter.rate = cfg.rate;
+  utter.pitch = cfg.pitch;
+  utter.volume = cfg.volume;
+  if (opts.onend) utter.onend = opts.onend;
+  synth.speak(utter);
+  return utter;
+}
+
+// ============ EFEITOS VISUAIS ============
+function screenShake() {
+  document.body.classList.add('shake');
+  setTimeout(() => document.body.classList.remove('shake'), 500);
+}
+function screenFlash(color) {
+  document.body.classList.add('flash-' + color);
+  setTimeout(() => document.body.classList.remove('flash-' + color), 600);
+}
+function celebraContainer() {
+  if (!quizContainer) return;
+  quizContainer.classList.add('celebrating');
+  setTimeout(() => quizContainer.classList.remove('celebrating'), 700);
+}
+function tremeContainer() {
+  if (!quizContainer) return;
+  quizContainer.classList.add('failing');
+  setTimeout(() => quizContainer.classList.remove('failing'), 500);
+}
+function flashTimeUp() {
+  if (!quizContainer) return;
+  quizContainer.classList.add('time-up');
+  setTimeout(() => quizContainer.classList.remove('time-up'), 1400);
+}
+
+// ============ PARTÍCULAS ============
+function explodirParticulas(x, y, qtd = 25, cores = null) {
+  const palette = cores || ['#00498B', '#0677CC', '#00BDB9', '#FBAB30', '#96100E', '#D66C25'];
+  for (let i = 0; i < qtd; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const cor = palette[Math.floor(Math.random() * palette.length)];
+    p.style.background = cor;
+    p.style.boxShadow = `0 0 15px ${cor}, 0 0 30px ${cor}`;
+    p.style.left = x + 'px';
+    p.style.top = y + 'px';
+    const angulo = Math.random() * Math.PI * 2;
+    const dist = Math.random() * 220 + 80;
+    p.style.setProperty('--tx', Math.cos(angulo) * dist + 'px');
+    p.style.setProperty('--ty', Math.sin(angulo) * dist + 'px');
+    const size = Math.random() * 10 + 6;
+    p.style.width = size + 'px';
+    p.style.height = size + 'px';
+    p.style.animationDuration = (Math.random() * 0.5 + 0.7) + 's';
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 1500);
+  }
+}
+
+function burstConfetti(amount) {
+  const colors = ['#00498B', '#0677CC', '#00BDB9', '#FBAB30', '#96100E', '#D66C25'];
+  for (let i = 0; i < amount; i++) {
+    const conf = document.createElement('div');
+    conf.className = 'confetti';
+    conf.style.left = Math.random() * 100 + 'vw';
+    conf.style.background = colors[Math.floor(Math.random() * colors.length)];
+    conf.style.animationDuration = (Math.random() * 2.5 + 2) + 's';
+    conf.style.animationDelay = (Math.random() * 0.8) + 's';
+    conf.style.animationName = 'fall';
+    conf.style.animationTimingFunction = 'ease-in';
+    conf.style.animationFillMode = 'forwards';
+    conf.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    const size = Math.random() * 10 + 6;
+    conf.style.width = conf.style.height = size + 'px';
+    document.body.appendChild(conf);
+    setTimeout(() => conf.remove(), 5000);
+  }
+}
+
+function mostrarPontosFlutuantes(x, y, texto, cor = '#38ef7d') {
+  const el = document.createElement('div');
+  el.className = 'float-points';
+  el.textContent = texto;
+  el.style.left = x + 'px';
+  el.style.top = y + 'px';
+  el.style.color = cor;
+  el.style.transform = 'translate(-50%, -50%)';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1500);
+}
+
+function mostrarCombo(nivel) {
+  const el = document.createElement('div');
+  el.className = 'combo-badge show';
+  el.textContent = `🔥 COMBO x${nivel}!`;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1300);
+}
+
+// ============ TIMER ============
+function iniciarTimer() {
+  pararTimer();
+
+  if (!configAtiva.timerAtivo) {
+    if (timerBar) timerBar.style.display = 'none';
+    if (timerLabel) timerLabel.style.display = 'none';
+    return;
+  }
+  if (timerBar) timerBar.style.display = 'block';
+  if (timerLabel) timerLabel.style.display = 'block';
+
+  timeLeft = configAtiva.tempoPergunta;
+  atualizarTimerUI();
+
+  timerInterval = setInterval(() => {
+    timeLeft -= 0.1;
+    if (timeLeft <= 0) {
+      timeLeft = 0;
+      atualizarTimerUI();
+      pararTimer();
+      tempoEsgotado();
+    } else {
+      atualizarTimerUI();
+      if (timeLeft <= 5 && Math.abs((timeLeft * 10) % 10) < 0.5) {
+        somTique();
+      }
+    }
+  }, 100);
+}
+
+function pararTimer() {
+  if (timerInterval) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+  }
+}
+
+function atualizarTimerUI() {
+  if (!configAtiva.timerAtivo) return;
+  if (!timerFill || !timerLabel) return;
+  const pct = (timeLeft / configAtiva.tempoPergunta) * 100;
+  timerFill.style.width = pct + '%';
+  timerLabel.textContent = `⏱️ ${Math.ceil(timeLeft)}s`;
+
+  timerFill.classList.remove('warning', 'danger');
+  timerLabel.classList.remove('warning', 'danger');
+
+  if (pct <= 20) {
+    timerFill.classList.add('danger');
+    timerLabel.classList.add('danger');
+  } else if (pct <= 50) {
+    timerFill.classList.add('warning');
+    timerLabel.classList.add('warning');
+  }
+}
+
+function tempoEsgotado() {
+  if (answered) return;
+  answered = true;
+  combo = 0;
+
+  synth.cancel();
+  somTempoEsgotado();
+  flashTimeUp();
+  screenFlash('red');
+  screenShake();
+  tremeContainer();
+
+  const q = quizData.questions[currentIndex];
+  const allOptions = document.querySelectorAll('.option');
+
+  allOptions.forEach(o => {
+    o.classList.add('disabled');
+    o.classList.remove('selected');
+  });
+
+  allOptions[q.correct].classList.add('correct');
+  allOptions[q.correct].querySelector('span').insertAdjacentHTML('afterend', '<span class="icon">✔</span>');
+
+  setTimeout(() => {
+    falar(`Tempo esgotado! A resposta correta é: ${q.options[q.correct]}`);
+  }, 400);
+
+  progressFill.style.width = `${((currentIndex + 1) / quizData.questions.length) * 100}%`;
+
+  // Esconde confirmar
+  const btnConfirm = document.getElementById('confirmBtn');
+  if (btnConfirm) {
+    btnConfirm.style.display = 'none';
+    btnConfirm.disabled = true;
+  }
+
+  // Mostra próxima
+  const btnNext = document.getElementById('nextBtn');
+  if (btnNext) {
+    btnNext.textContent = currentIndex === quizData.questions.length - 1 ? 'Ver Resultado 🏁' : 'Próxima ➜';
+    btnNext.disabled = false;
+    btnNext.style.display = 'block';
+    btnNext.style.opacity = '1';
+    btnNext.style.pointerEvents = 'auto';
+    btnNext.style.transform = 'translateY(0)';
+  }
+}
+
+// ============ MODAL CONFIGURAÇÕES ============
+function abrirModal() {
+  configTemp = { ...configAtiva };
+  selecionarVozNoSelect(configTemp.voiceName, configTemp.voiceLang);
+  if (rateRange) rateRange.value = configTemp.rate;
+  if (pitchRange) pitchRange.value = configTemp.pitch;
+  if (volumeRange) volumeRange.value = configTemp.volume;
+  if (timerAtivoCheck) timerAtivoCheck.checked = configTemp.timerAtivo;
+  if (tempoRange) tempoRange.value = configTemp.tempoPergunta;
+  if (tempoFieldGroup) tempoFieldGroup.classList.toggle('disabled', !configTemp.timerAtivo);
+  atualizarLabels();
+  if (settingsModal) settingsModal.classList.add('show');
+  somClique();
+}
+
+function fecharModal() {
+  if (settingsModal) settingsModal.classList.remove('show');
+  synth.cancel();
+}
+
+function atualizarLabels() {
+  if (rateValue && rateRange) rateValue.textContent = parseFloat(rateRange.value).toFixed(2) + 'x';
+  if (pitchValue && pitchRange) pitchValue.textContent = parseFloat(pitchRange.value).toFixed(2);
+  if (volumeValue && volumeRange) volumeValue.textContent = Math.round(volumeRange.value * 100) + '%';
+  if (tempoValue && tempoRange) tempoValue.textContent = tempoRange.value + 's';
+}
+
+if (settingsBtn) settingsBtn.addEventListener('click', abrirModal);
+if (modalCloseBtn) modalCloseBtn.addEventListener('click', fecharModal);
+if (cancelBtn) cancelBtn.addEventListener('click', fecharModal);
+if (settingsModal) settingsModal.addEventListener('click', e => { if (e.target === settingsModal) fecharModal(); });
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (settingsModal && settingsModal.classList.contains('show')) fecharModal();
+    if (aboutModal && aboutModal.classList.contains('show')) fecharAbout();
+  }
+});
+
+if (voiceSelect) voiceSelect.addEventListener('change', () => {
+  const voz = obterVozTemp();
+  if (voz) { configTemp.voiceName = voz.name; configTemp.voiceLang = voz.lang; }
+  somClique();
+});
+if (rateRange) rateRange.addEventListener('input', () => { configTemp.rate = parseFloat(rateRange.value); atualizarLabels(); });
+if (pitchRange) pitchRange.addEventListener('input', () => { configTemp.pitch = parseFloat(pitchRange.value); atualizarLabels(); });
+if (volumeRange) volumeRange.addEventListener('input', () => { configTemp.volume = parseFloat(volumeRange.value); atualizarLabels(); });
+
+if (timerAtivoCheck) timerAtivoCheck.addEventListener('change', () => {
+  configTemp.timerAtivo = timerAtivoCheck.checked;
+  if (tempoFieldGroup) tempoFieldGroup.classList.toggle('disabled', !configTemp.timerAtivo);
+  somClique();
+});
+if (tempoRange) tempoRange.addEventListener('input', () => {
+  configTemp.tempoPergunta = parseInt(tempoRange.value, 10);
+  atualizarLabels();
+});
+
+if (testVoiceBtn) testVoiceBtn.addEventListener('click', () => {
+  const voz = obterVozTemp();
+  if (voz) { configTemp.voiceName = voz.name; configTemp.voiceLang = voz.lang; }
+  falar('Esta é uma demonstração da voz escolhida. Um, dois, três, testando.', { useTemp: true });
+});
+
+if (resetConfigBtn) resetConfigBtn.addEventListener('click', () => {
+  configTemp = {
+    voiceName: null,
+    voiceLang: null,
+    rate: 1,
+    pitch: 1,
+    volume: 1,
+    timerAtivo: true,
+    tempoPergunta: 30
+  };
+  selecionarVozNoSelect(null, null);
+  if (rateRange) rateRange.value = 1;
+  if (pitchRange) pitchRange.value = 1;
+  if (volumeRange) volumeRange.value = 1;
+  if (timerAtivoCheck) timerAtivoCheck.checked = true;
+  if (tempoRange) tempoRange.value = 30;
+  if (tempoFieldGroup) tempoFieldGroup.classList.remove('disabled');
+  atualizarLabels();
+  somClique();
+});
+
+if (saveBtn) saveBtn.addEventListener('click', () => {
+  const voz = obterVozTemp();
+  if (voz) { configTemp.voiceName = voz.name; configTemp.voiceLang = voz.lang; }
+  configAtiva = { ...configTemp };
+  salvarConfig();
+  fecharModal();
+  mostrarToast('✓ Configurações salvas!');
+  somAcerto();
+  if (!answered && quizData) iniciarTimer();
+});
+
+// ============ BOTÃO SOM ============
+if (soundBtn) soundBtn.addEventListener('click', () => {
+  somAtivado = !somAtivado;
+  salvarSom();
+  atualizarBotaoSom();
+  if (somAtivado) {
+    somClique();
+    mostrarToast('🔊 Som ligado');
+  } else {
+    synth.cancel();
+    mostrarToast('🔇 Som desligado');
+  }
+});
+
+// ============ MODAL SOBRE ============
+function abrirAbout() {
+  if (aboutModal) aboutModal.classList.add('show');
+  somClique();
+}
+function fecharAbout() {
+  if (aboutModal) aboutModal.classList.remove('show');
+}
+if (aboutBtn) aboutBtn.addEventListener('click', abrirAbout);
+if (aboutCloseBtn) aboutCloseBtn.addEventListener('click', fecharAbout);
+if (aboutOkBtn) aboutOkBtn.addEventListener('click', fecharAbout);
+if (aboutModal) aboutModal.addEventListener('click', e => { if (e.target === aboutModal) fecharAbout(); });
+
+function iniciais(nome) {
+  return nome.trim().split(/\s+/).slice(0, 2)
+    .map(p => p[0] ? p[0].toUpperCase() : '').join('');
+}
+
+function criarLinks(pessoa) {
+  const links = [];
+  if (pessoa.linkedin && pessoa.linkedin.trim() !== '') {
+    links.push(`<a class="about-link linkedin" href="${pessoa.linkedin}" target="_blank" rel="noopener" title="LinkedIn de ${pessoa.nome}">in</a>`);
+  }
+  if (pessoa.lattes && pessoa.lattes.trim() !== '') {
+    links.push(`<a class="about-link lattes" href="${pessoa.lattes}" target="_blank" rel="noopener" title="Lattes de ${pessoa.nome}">CV</a>`);
+  }
+  return links.length ? `<div class="about-links">${links.join('')}</div>` : '';
+}
+
+function criarPessoa(pessoa, isProfessor = false) {
+  const avatarClass = isProfessor ? 'about-avatar professor' : 'about-avatar';
+  return `
+    <div class="about-pessoa">
+      <div class="about-pessoa-info">
+        <div class="${avatarClass}">${iniciais(pessoa.nome)}</div>
+        <div class="about-pessoa-nome">${pessoa.nome}</div>
+      </div>
+      ${criarLinks(pessoa)}
+    </div>
+  `;
+}
+
+function renderizarSobre(data) {
+  const professorHTML = data.professor ? `
+    <div class="about-secao">
+      <div class="about-secao-titulo">${data.professor.titulo || 'Professor'}</div>
+      ${criarPessoa(data.professor, true)}
+    </div>` : '';
+
+  const alunosHTML = (data.alunos && data.alunos.length) ? `
+    <div class="about-secao">
+      <div class="about-secao-titulo">Alunos</div>
+      ${data.alunos.map(a => criarPessoa(a, false)).join('')}
+    </div>` : '';
+
+  if (aboutBody) {
+    aboutBody.innerHTML = `
+      <div>
+        <div class="about-titulo">${data.titulo || 'Sobre o Projeto'}</div>
+        <div class="about-descricao">${data.descricao || ''}</div>
+      </div>
+      ${professorHTML}
+      ${alunosHTML}
+      ${data.rodape ? `<div class="about-rodape">${data.rodape}</div>` : ''}
+    `;
+  }
+}
+
+// ============ CARREGAR JSONs ============
+Promise.all([
+  fetch('questoes.json').then(r => { if (!r.ok) throw new Error('Erro ao carregar questoes.json'); return r.json(); }),
+  fetch('sobre.json').then(r => { if (!r.ok) throw new Error('Erro ao carregar sobre.json'); return r.json(); }).catch(() => null)
+])
+  .then(([questoes, sobre]) => {
+    quizData = questoes;
+    sobreData = sobre;
+    if (loadingEl) loadingEl.classList.add('hidden');
+    if (quizMain) quizMain.classList.remove('hidden');
+    if (sobreData) renderizarSobre(sobreData);
+    else if (aboutBody) aboutBody.innerHTML = '<div class="about-descricao">Não foi possível carregar o arquivo <b>sobre.json</b>.</div>';
+    loadQuestion();
+  })
+  .catch(err => {
+    if (loadingEl) {
+      loadingEl.innerHTML = `❌ Erro ao carregar <b>questoes.json</b>.<br><small>${err.message}</small>`;
+    }
+    console.error('[ERRO] Falha ao carregar JSONs:', err);
+  });
+
+// ============ QUIZ ============
+function loadQuestion() {
+  console.log('[DEBUG] loadQuestion — currentIndex:', currentIndex);
+
+  answered = false;
+  selectedIndex = null;
+
+  if (!quizData || !quizData.questions || !quizData.questions[currentIndex]) {
+    console.error('[ERRO] quizData inválido');
+    return;
+  }
+
+  const q = quizData.questions[currentIndex];
+
+  if (questionText) {
+    questionText.textContent = q.question;
+    questionText.style.animation = 'none';
+    void questionText.offsetWidth;
+    questionText.style.animation = '';
+  }
+
+  if (optionsContainer) {
+    optionsContainer.innerHTML = '';
+
+    q.options.forEach((opt, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'option';
+      btn.dataset.index = i;
+      const spanText = document.createElement('span');
+      spanText.textContent = opt;
+      btn.appendChild(spanText);
+      btn.addEventListener('click', () => selectOption(i, btn));
+      optionsContainer.appendChild(btn);
+    });
+  }
+
+  // ESCONDE os botões — busca SEMPRE pelo ID
+  const btnConfirm = document.getElementById('confirmBtn');
+  const btnNext = document.getElementById('nextBtn');
+
+  if (btnConfirm) {
+    btnConfirm.style.display = 'none';
+    btnConfirm.disabled = true;
+  }
+  if (btnNext) {
+    btnNext.style.display = 'none';
+  }
+
+  if (progressInfo) progressInfo.textContent = `Pergunta ${currentIndex + 1} de ${quizData.questions.length}`;
+  if (progressFill) progressFill.style.width = `${(currentIndex / quizData.questions.length) * 100}%`;
+
+  iniciarTimer();
+}
+
+function selectOption(index, btn) {
+  if (answered) return;
+
+  btn.classList.add('rippling');
+  setTimeout(() => btn.classList.remove('rippling'), 600);
+
+  document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedIndex = index;
+
+  somClique();
+
+  const textoAlternativa = quizData.questions[currentIndex].options[index];
+  falar(textoAlternativa);
+
+  // MOSTRA o botão confirmar — busca pelo ID
+  const btnConfirm = document.getElementById('confirmBtn');
+  if (btnConfirm) {
+    btnConfirm.disabled = false;
+    btnConfirm.style.display = 'block';
+  }
+}
+
+// ============ CONFIRMAR ============
+function confirmarResposta() {
+  // BUSCA os botões a cada clique — nunca guarda referência stale
+  const btnConfirm = document.getElementById('confirmBtn');
+  const btnNext = document.getElementById('nextBtn');
+
+  console.log('[DEBUG] confirmarResposta. btnConfirm:', btnConfirm ? 'OK' : 'NULL', '| btnNext:', btnNext ? 'OK' : 'NULL');
+
+  if (!btnConfirm || !btnNext) {
+    console.error('[ERRO CRÍTICO] Botões não encontrados no DOM!');
+    return;
+  }
+
+  if (answered || selectedIndex === null || !quizData) return;
+  answered = true;
+  pararTimer();
+  synth.cancel();
+
+  const q = quizData.questions[currentIndex];
+  const allOptions = document.querySelectorAll('.option');
+  const btnClicado = allOptions[selectedIndex];
+
+  let cx = window.innerWidth / 2;
+  let cy = window.innerHeight / 2;
+  if (btnClicado) {
+    const rect = btnClicado.getBoundingClientRect();
+    cx = rect.left + rect.width / 2;
+    cy = rect.top + rect.height / 2;
+  }
+
+  allOptions.forEach(o => {
+    o.classList.add('disabled');
+    o.classList.remove('selected');
+  });
+
+  const acertou = selectedIndex === q.correct;
+
+  if (acertou) {
+    allOptions[q.correct].classList.add('correct');
+    allOptions[q.correct].querySelector('span').insertAdjacentHTML('afterend', '<span class="icon">✔</span>');
+
+    combo++;
+    score++;
+    if (scoreBadge) {
+      scoreBadge.textContent = `⭐ ${score} pts`;
+      scoreBadge.classList.add('bump');
+      setTimeout(() => scoreBadge.classList.remove('bump'), 700);
+    }
+
+    somAcerto();
+    screenFlash('green');
+    celebraContainer();
+    explodirParticulas(cx, cy, 35);
+    burstConfetti(40);
+    mostrarPontosFlutuantes(cx, cy - 30, '+1', '#38ef7d');
+
+    if (combo >= 2) {
+      setTimeout(() => {
+        mostrarCombo(combo);
+        somCombo(combo);
+        if (combo >= 3) burstConfetti(30);
+      }, 300);
+    }
+  } else {
+    combo = 0;
+    allOptions[q.correct].classList.add('correct');
+    allOptions[q.correct].querySelector('span').insertAdjacentHTML('afterend', '<span class="icon">✔</span>');
+    allOptions[selectedIndex].classList.add('wrong');
+    allOptions[selectedIndex].querySelector('span').insertAdjacentHTML('afterend', '<span class="icon">✖</span>');
+
+    somErro();
+    screenFlash('red');
+    screenShake();
+    tremeContainer();
+    explodirParticulas(cx, cy, 15, ['#96100E', '#d4181a', '#D66C25']);
+  }
+
+  const msg = acertou
+    ? 'Resposta correta! Parabéns!'
+    : `Resposta incorreta. A resposta correta é: ${q.options[q.correct]}`;
+  setTimeout(() => falar(msg), acertou ? 500 : 400);
+
+  if (progressFill) progressFill.style.width = `${((currentIndex + 1) / quizData.questions.length) * 100}%`;
+
+  // Esconde confirmar
+  btnConfirm.style.display = 'none';
+  btnConfirm.disabled = true;
+
+  // MOSTRA próxima
+  btnNext.textContent = currentIndex === quizData.questions.length - 1 ? 'Ver Resultado 🏁' : 'Próxima ➜';
+  btnNext.disabled = false;
+  btnNext.style.display = 'block';
+  btnNext.style.opacity = '1';
+  btnNext.style.pointerEvents = 'auto';
+  btnNext.style.transform = 'translateY(0)';
+
+  console.log('[DEBUG] Botão próxima exibido com sucesso');
+}
+
+if (confirmBtn) confirmBtn.addEventListener('click', confirmarResposta);
+
+// ============ PRÓXIMA ============
+function irParaProxima() {
+  console.log('[DEBUG] irParaProxima. currentIndex antes:', currentIndex);
+
+  synth.cancel();
+  pararTimer();
+
+  currentIndex++;
+  console.log('[DEBUG] currentIndex depois:', currentIndex);
+
+  if (currentIndex < quizData.questions.length) {
+    loadQuestion();
+  } else {
+    showResult();
+  }
+}
+
+if (nextBtn) nextBtn.addEventListener('click', irParaProxima);
+
+// ============ RESULTADO ============
+function showResult() {
+  pararTimer();
+  if (quizContent) quizContent.classList.add('hidden');
+  if (resultScreen) resultScreen.classList.remove('hidden');
+
+  const total = quizData.questions.length;
+  const percent = (score / total) * 100;
+
+  const finalScoreEl = document.getElementById('finalScore');
+  if (finalScoreEl) finalScoreEl.textContent = `${score} / ${total}`;
+
+  const emoji = document.getElementById('resultEmoji');
+  const msg = document.getElementById('resultMessage');
+
+  if (percent === 100) {
+    if (emoji) emoji.textContent = '🏆';
+    if (msg) msg.textContent = 'PERFEITO! Você é um MESTRE! 🌟';
+    burstConfetti(200);
+    setTimeout(() => burstConfetti(150), 400);
+    setTimeout(() => burstConfetti(100), 800);
+    somVitoria();
+    screenFlash('green');
+    for (let i = 0; i < 5; i++) {
+      setTimeout(() => {
+        explodirParticulas(
+          window.innerWidth * Math.random(),
+          window.innerHeight * Math.random(),
+          25
+        );
+      }, i * 200);
+    }
+  } else if (percent >= 70) {
+    if (emoji) emoji.textContent = '🎉';
+    if (msg) msg.textContent = 'Muito bem! Excelente desempenho!';
+    burstConfetti(100);
+    setTimeout(() => burstConfetti(80), 400);
+    somVitoria();
+  } else if (percent >= 40) {
+    if (emoji) emoji.textContent = '👍';
+    if (msg) msg.textContent = 'Bom trabalho! Continue praticando.';
+    somAcerto();
+  } else {
+    if (emoji) emoji.textContent = '📚';
+    if (msg) msg.textContent = 'Continue estudando, você vai melhorar!';
+    somDerrota();
+  }
+
+  if (progressFill) progressFill.style.width = '100%';
+  if (progressInfo) progressInfo.textContent = 'Concluído!';
+}
+
+if (speakBtn) speakBtn.addEventListener('click', () => {
+  if (!('speechSynthesis' in window)) return;
+  if (!somAtivado) {
+    mostrarToast('🔇 Ative o som para ouvir');
+    return;
+  }
+  synth.cancel();
+  if (speakBtn.classList.contains('speaking')) {
+    speakBtn.classList.remove('speaking');
+    return;
+  }
+  const q = quizData.questions[currentIndex];
+  let texto = `Pergunta ${currentIndex + 1}. ${q.question}. As alternativas são: `;
+  q.options.forEach((opt, i) => { texto += `Alternativa ${i + 1}: ${opt}. `; });
+  const utter = falar(texto, { onend: () => speakBtn.classList.remove('speaking') });
+  if (utter) {
+    utter.onstart = () => speakBtn.classList.add('speaking');
+    utter.onerror = () => speakBtn.classList.remove('speaking');
+  }
+});
+
+const restartBtn = document.getElementById('restartBtn');
+if (restartBtn) restartBtn.addEventListener('click', () => {
+  synth.cancel();
+  pararTimer();
+  currentIndex = 0;
+  score = 0;
+  combo = 0;
+  answered = false;
+  selectedIndex = null;
+  if (scoreBadge) scoreBadge.textContent = '⭐ 0 pts';
+  if (progressFill) progressFill.style.width = '0%';
+  if (resultScreen) resultScreen.classList.add('hidden');
+  if (quizContent) quizContent.classList.remove('hidden');
+  somClique();
+  loadQuestion();
+});
+
+// ============ INICIALIZAÇÃO ============
+carregarConfig();
+carregarSom();
+speechSynthesis.onvoiceschanged = listarVozes;
+listarVozes();
+setTimeout(listarVozes, 200);
+
+
+================================================================================
+ARQUIVO: teste\sobre.json
+================================================================================
+
+{
+  "titulo": "Sobre o Projeto",
+  "descricao": "Sistema desenvolvido para a disciplina de Extensão em Pós-Graduação de Engenharia Biomédica.",
+  "professor": {
+    "titulo": "Professor",
+    "nome": "Mario",
+    "lattes": "http://lattes.cnpq.br/0000000000000000",
+    "linkedin": "https://www.linkedin.com/in/mario-exemplo"
+  },
+  "alunos": [
+    {
+      "nome": "aluno01",
+      "lattes": "http://lattes.cnpq.br/1111111111111111",
+      "linkedin": "https://www.linkedin.com/in/exemplo"
+    },
+    {
+      "nome": "aluno02",
+      "lattes": "http://lattes.cnpq.br/2222222222222222",
+      "linkedin": "https://www.linkedin.com/in/exemplo"
+    }
+  ],
+  "rodape": "© 2025 - Todos os direitos reservados"
+}
+
+
+================================================================================
+ARQUIVO: teste\style.css
+================================================================================
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
+
+body {
+  min-height: 100vh;
+  background: linear-gradient(-45deg, #002a52, #00498B, #0677CC, #00498B);
+  background-size: 400% 400%;
+  animation: gradientBG 20s ease infinite;
+  overflow-x: hidden;
+  position: relative;
+  padding: 30px 20px;
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(0, 189, 185, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(251, 171, 48, 0.10) 0%, transparent 55%);
+  pointer-events: none;
+  z-index: 0;
+  animation: bgPulse 6s ease-in-out infinite;
+}
+
+@keyframes bgPulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+body.shake { animation: shakeScreen 0.5s cubic-bezier(.36,.07,.19,.97); }
+@keyframes shakeScreen {
+  10%, 90% { transform: translate3d(-2px, 0, 0); }
+  20%, 80% { transform: translate3d(4px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-8px, 0, 0); }
+  40%, 60% { transform: translate3d(8px, 0, 0); }
+}
+
+body.flash-green::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle, rgba(56,239,125,0.45) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 500;
+  animation: flashFade 0.6s ease-out forwards;
+}
+@keyframes flashFade {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+body.flash-red::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle, rgba(150, 16, 14, 0.55) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 500;
+  animation: flashFade 0.6s ease-out forwards;
+}
+
+.page-wrapper {
+  min-height: calc(100vh - 60px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  position: relative;
+  z-index: 10;
+  animation: pageEnter 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+@keyframes pageEnter {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.brand-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 720px;
+}
+
+.brand-logo {
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+  display: block;
+}
+
+.quiz-container {
+  width: 100%;
+  max-width: 720px;
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+  padding: 35px;
+  position: relative;
+  animation: slideIn 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  overflow: hidden;
+  transition: box-shadow 0.4s;
+}
+
+.quiz-container.celebrating {
+  box-shadow: 0 25px 60px rgba(0,0,0,0.35),
+              0 0 60px rgba(0, 189, 185, 0.7),
+              0 0 110px rgba(0, 189, 185, 0.4);
+  animation: celebratePulse 0.6s ease;
+}
+
+@keyframes celebratePulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+.quiz-container.failing {
+  animation: failShake 0.5s ease;
+}
+
+@keyframes failShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-60px) scale(0.9); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.quiz-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 10px;
+}
+
+.progress-info {
+  font-size: 0.9rem;
+  color: #555;
+  font-weight: 600;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.icon-btn {
+  background: #f5f7fa;
+  border: 2px solid #e0e6ed;
+  color: #00498B;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.15rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.icon-btn:hover {
+  background: linear-gradient(135deg, #00498B, #0677CC);
+  color: #fff;
+  border-color: #00498B;
+  transform: rotate(90deg) scale(1.1);
+  box-shadow: 0 6px 18px rgba(0, 73, 139, 0.5);
+}
+
+#aboutBtn:hover {
+  transform: rotate(-90deg) scale(1.1);
+  background: linear-gradient(135deg, #0677CC, #00BDB9);
+  border-color: #0677CC;
+  box-shadow: 0 6px 18px rgba(6, 119, 204, 0.5);
+}
+
+#soundBtn.muted {
+  background: linear-gradient(135deg, #f5f7fa, #e0e6ed);
+  color: #999;
+}
+#soundBtn.muted:hover {
+  background: linear-gradient(135deg, #96100E, #D66C25);
+  color: #fff;
+  border-color: #96100E;
+  transform: rotate(0deg) scale(1.1);
+  box-shadow: 0 6px 18px rgba(150, 16, 14, 0.5);
+}
+#soundBtn:hover { transform: rotate(0deg) scale(1.1); }
+
+.score-badge {
+  background: linear-gradient(135deg, #00498B, #0677CC);
+  color: #fff;
+  padding: 8px 18px;
+  border-radius: 30px;
+  font-weight: bold;
+  font-size: 0.95rem;
+  box-shadow: 0 5px 15px rgba(0, 73, 139, 0.5);
+  transition: transform 0.3s;
+  position: relative;
+}
+
+.score-badge.bump { animation: bump 0.6s ease; }
+@keyframes bump {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.4) rotate(-5deg); }
+  50% { transform: scale(0.9) rotate(3deg); }
+  70% { transform: scale(1.15) rotate(-2deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+.progress-bar {
+  height: 8px;
+  background: #e0e0e0;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 25px;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #00498B, #00BDB9, #FBAB30, #00498B);
+  background-size: 300% 100%;
+  border-radius: 10px;
+  transition: width 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  animation: shimmer 4s linear infinite;
+  position: relative;
+}
+
+@keyframes shimmer {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 300% 50%; }
+}
+
+.timer-bar {
+  height: 10px;
+  background: #e0e0e0;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 6px;
+  position: relative;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.timer-fill {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, #00BDB9, #00498B);
+  border-radius: 10px;
+  transition: width 0.1s linear, background 0.3s ease;
+  transform-origin: left;
+}
+
+.timer-fill.warning {
+  background: linear-gradient(90deg, #FBAB30, #D66C25);
+  animation: timerPulse 0.6s ease infinite;
+}
+
+.timer-fill.danger {
+  background: linear-gradient(90deg, #D66C25, #96100E);
+  animation: timerPulse 0.35s ease infinite;
+}
+
+@keyframes timerPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.65; }
+}
+
+.timer-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #00498B;
+  text-align: right;
+  margin-bottom: 18px;
+  transition: color 0.3s;
+}
+
+.timer-label.warning { color: #D66C25; }
+.timer-label.danger {
+  color: #96100E;
+  animation: timerLabelPulse 0.4s ease infinite;
+}
+
+@keyframes timerLabelPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+}
+
+.timer-bar.hidden,
+.timer-label.hidden { display: none; }
+
+.quiz-container.time-up {
+  animation: timeUpFlash 0.6s ease 2;
+}
+
+@keyframes timeUpFlash {
+  0%, 100% { box-shadow: 0 25px 60px rgba(0,0,0,0.35); }
+  50% { box-shadow: 0 25px 60px rgba(0,0,0,0.35),
+                    0 0 60px rgba(150, 16, 14, 0.9),
+                    0 0 100px rgba(150, 16, 14, 0.5); }
+}
+
+.question-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+
+.question-text {
+  font-size: 1.35rem;
+  color: #1a1a2e;
+  font-weight: 600;
+  line-height: 1.5;
+  flex: 1;
+  animation: questionEnter 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+@keyframes questionEnter {
+  0% { opacity: 0; transform: translateX(-40px) rotate(-2deg); }
+  100% { opacity: 1; transform: translateX(0) rotate(0); }
+}
+
+.speak-btn {
+  background: linear-gradient(135deg, #0677CC, #00498B);
+  border: none;
+  color: #fff;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 5px 15px rgba(0, 73, 139, 0.4);
+  transition: all 0.3s;
+}
+
+.speak-btn:hover { transform: scale(1.15) rotate(-10deg); }
+.speak-btn:active { transform: scale(0.9); }
+.speak-btn.speaking { animation: pulse 1s infinite; }
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(6, 119, 204, 0.7); }
+  50% { box-shadow: 0 0 0 15px rgba(6, 119, 204, 0); }
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.option {
+  padding: 16px 20px;
+  background: #f5f7fa;
+  border: 2px solid #e0e6ed;
+  border-radius: 14px;
+  cursor: pointer;
+  font-size: 1.05rem;
+  color: #2c3e50;
+  font-weight: 500;
+  text-align: left;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+  animation: optionEnter 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) backwards;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.option:nth-child(1) { animation-delay: 0.1s; }
+.option:nth-child(2) { animation-delay: 0.2s; }
+.option:nth-child(3) { animation-delay: 0.3s; }
+.option:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes optionEnter {
+  0% { opacity: 0; transform: translateX(-50px) scale(0.9); }
+  60% { opacity: 1; transform: translateX(10px) scale(1.02); }
+  100% { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+.option::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 0; height: 0;
+  background: radial-gradient(circle, rgba(6, 119, 204, 0.5) 0%, transparent 70%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.5s ease, height 0.5s ease, opacity 0.5s;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.option.rippling::before {
+  width: 500px;
+  height: 500px;
+  opacity: 1;
+  transition: width 0s, height 0s, opacity 0.6s;
+}
+
+.option:hover:not(.disabled) {
+  background: #e8f4fb;
+  border-color: #0677CC;
+  transform: translateX(10px) scale(1.02);
+  box-shadow: 0 5px 20px rgba(6, 119, 204, 0.3);
+}
+
+.option.selected {
+  background: linear-gradient(135deg, #0677CC, #00498B);
+  border-color: #00498B;
+  color: #fff;
+  transform: translateX(10px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(0, 73, 139, 0.6);
+  animation: selectedPop 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+@keyframes selectedPop {
+  0% { transform: scale(1) translateX(0); }
+  50% { transform: scale(1.08) translateX(12px); }
+  100% { transform: scale(1.02) translateX(10px); }
+}
+
+.option.selected::after {
+  content: '🎧';
+  font-size: 1.2rem;
+  animation: iconPop 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+.option.disabled { cursor: not-allowed; }
+
+.option.correct {
+  background: linear-gradient(135deg, #11998e, #38ef7d);
+  border-color: #11998e;
+  color: #fff;
+  animation: correctBoom 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  box-shadow: 0 0 30px rgba(56, 239, 125, 0.9),
+              0 0 60px rgba(56, 239, 125, 0.5);
+  transform: translateX(0) scale(1.02);
+  z-index: 5;
+}
+
+@keyframes correctBoom {
+  0% { transform: scale(1) rotate(0); }
+  20% { transform: scale(1.15) rotate(-3deg); }
+  40% { transform: scale(0.95) rotate(3deg); }
+  60% { transform: scale(1.1) rotate(-2deg); }
+  80% { transform: scale(0.98) rotate(1deg); }
+  100% { transform: scale(1.02) rotate(0); }
+}
+
+.option.wrong {
+  background: linear-gradient(135deg, #96100E, #d4181a);
+  border-color: #96100E;
+  color: #fff;
+  animation: wrongShake 0.7s cubic-bezier(.36,.07,.19,.97);
+  box-shadow: 0 0 25px rgba(150, 16, 14, 0.8);
+  transform: translateX(0);
+}
+
+@keyframes wrongShake {
+  10%, 90% { transform: translate3d(-4px, 0, 0) rotate(-1deg); }
+  20%, 80% { transform: translate3d(6px, 0, 0) rotate(1deg); }
+  30%, 50%, 70% { transform: translate3d(-12px, 0, 0) rotate(-2deg); }
+  40%, 60% { transform: translate3d(12px, 0, 0) rotate(2deg); }
+}
+
+.option .icon {
+  font-size: 1.4rem;
+  animation: iconBoom 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+@keyframes iconBoom {
+  0% { transform: scale(0) rotate(-180deg); }
+  60% { transform: scale(1.4) rotate(20deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+
+.btn-group {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+/* ============================================
+   BOTÕES — VISIBILIDADE GARANTIDA
+   Por padrão escondidos. Só aparecem via JS.
+   ============================================ */
+.confirm-btn,
+.next-btn {
+  flex: 1;
+  padding: 16px;
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: none;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.confirm-btn {
+  background: linear-gradient(135deg, #00498B, #0677CC, #00498B);
+  background-size: 200% 100%;
+  box-shadow: 0 8px 25px rgba(0, 73, 139, 0.5);
+  animation: btnShimmer 3s linear infinite;
+}
+
+.next-btn {
+  background: linear-gradient(135deg, #0677CC, #00BDB9);
+  box-shadow: 0 8px 25px rgba(6, 119, 204, 0.5);
+}
+
+@keyframes btnShimmer {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+.confirm-btn:hover:not(:disabled) {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 12px 35px rgba(0, 73, 139, 0.8);
+}
+.confirm-btn:active:not(:disabled) { transform: translateY(0) scale(0.98); }
+.confirm-btn:disabled {
+  background: #b0b0b0;
+  cursor: not-allowed;
+  box-shadow: none;
+  animation: none;
+}
+
+.next-btn:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 12px 35px rgba(6, 119, 204, 0.8);
+}
+.next-btn:active { transform: translateY(0) scale(0.98); }
+
+.combo-badge {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%) scale(0);
+  background: linear-gradient(135deg, #FBAB30, #D66C25, #96100E);
+  color: #fff;
+  padding: 14px 32px;
+  border-radius: 30px;
+  font-size: 1.5rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.35);
+  box-shadow: 0 12px 40px rgba(214, 108, 37, 0.6),
+              0 0 60px rgba(251, 171, 48, 0.5);
+  z-index: 1500;
+  pointer-events: none;
+  text-transform: uppercase;
+}
+
+.combo-badge.show {
+  animation: comboPop 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+@keyframes comboPop {
+  0% { transform: translateX(-50%) scale(0) rotate(-180deg); opacity: 0; }
+  20% { transform: translateX(-50%) scale(1.3) rotate(10deg); opacity: 1; }
+  40% { transform: translateX(-50%) scale(1) rotate(-5deg); }
+  60% { transform: translateX(-50%) scale(1.15) rotate(3deg); }
+  80% { transform: translateX(-50%) scale(1) rotate(0); opacity: 1; }
+  100% { transform: translateX(-50%) scale(0.8) translateY(-40px); opacity: 0; }
+}
+
+.float-points {
+  position: fixed;
+  font-size: 2rem;
+  font-weight: 900;
+  pointer-events: none;
+  z-index: 2000;
+  text-shadow: 0 0 20px currentColor, 0 4px 8px rgba(0,0,0,0.3);
+  animation: floatUp 1.4s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+}
+
+@keyframes floatUp {
+  0% { opacity: 0; transform: translateY(0) scale(0.5) rotate(0); }
+  20% { opacity: 1; transform: translateY(-30px) scale(1.3) rotate(-10deg); }
+  60% { opacity: 1; transform: translateY(-80px) scale(1) rotate(10deg); }
+  100% { opacity: 0; transform: translateY(-180px) scale(0.8) rotate(0); }
+}
+
+.particle {
+  position: fixed;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1500;
+  animation: explode 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes explode {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--tx), var(--ty)) scale(0);
+    opacity: 0;
+  }
+}
+
+.result-screen { text-align: center; padding: 20px 0; animation: fadeIn 0.6s ease; }
+
+.result-screen h2 {
+  font-size: 2.4rem;
+  background: linear-gradient(135deg, #00498B, #00BDB9, #00498B);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 15px;
+  animation: rainbowText 3s linear infinite;
+}
+
+@keyframes rainbowText {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+.result-emoji {
+  font-size: 5rem;
+  margin-bottom: 15px;
+  animation: bounceBig 1s infinite;
+  display: inline-block;
+}
+
+@keyframes bounceBig {
+  0%, 100% { transform: translateY(0) scale(1) rotate(0); }
+  25% { transform: translateY(-25px) scale(1.1) rotate(-8deg); }
+  50% { transform: translateY(0) scale(1) rotate(0); }
+  75% { transform: translateY(-15px) scale(1.05) rotate(8deg); }
+}
+
+.result-screen p { font-size: 1.2rem; color: #444; margin-bottom: 10px; }
+
+.result-score {
+  font-size: 3.5rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, #00498B, #00BDB9, #00498B);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 20px 0;
+  animation: rainbowText 2s linear infinite;
+}
+
+.restart-btn {
+  padding: 16px 44px;
+  background: linear-gradient(135deg, #00498B, #0677CC, #00498B);
+  background-size: 200% auto;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  font-size: 1.15rem;
+  font-weight: 800;
+  cursor: pointer;
+  margin-top: 15px;
+  box-shadow: 0 8px 25px rgba(0, 73, 139, 0.5);
+  transition: all 0.3s;
+  animation: btnShimmer 3s linear infinite;
+}
+.restart-btn:hover {
+  transform: scale(1.08) rotate(-2deg);
+  box-shadow: 0 15px 40px rgba(0, 73, 139, 0.8);
+}
+
+.loading { text-align: center; padding: 40px; color: #555; font-size: 1.2rem; font-weight: 600; }
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 20, 45, 0.75);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.modal-overlay.show { opacity: 1; pointer-events: all; }
+
+.modal {
+  width: 100%;
+  max-width: 480px;
+  background: #fff;
+  border-radius: 22px;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+  transform: translateY(30px) scale(0.95);
+  transition: transform 0.35s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-overlay.show .modal { transform: translateY(0) scale(1); }
+
+.modal-header {
+  background: linear-gradient(135deg, #00498B, #0677CC);
+  color: #fff;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-header h2 { font-size: 1.15rem; display: flex; align-items: center; gap: 10px; font-weight: 700; }
+
+.modal-close {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: #fff;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s;
+}
+
+.modal-close:hover { background: rgba(255, 255, 255, 0.35); transform: rotate(90deg); }
+
+.modal-body {
+  padding: 24px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.section-title {
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #999;
+  margin-top: 6px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #f0f2f5;
+}
+
+.section-title:first-child { margin-top: 0; }
+
+.field-group { display: flex; flex-direction: column; gap: 8px; }
+
+.field-group label {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #2c3e50;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.field-group label:has(.check-input) {
+  justify-content: flex-start;
+  gap: 4px;
+  cursor: pointer;
+  padding: 6px 0;
+  font-size: 0.92rem;
+}
+
+.field-group label .val {
+  color: #00498B;
+  font-weight: 800;
+  background: #e8f4fb;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 0.78rem;
+}
+
+.field-group.disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.check-input {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #e0e6ed;
+  border-radius: 6px;
+  background: #f9fafb;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.25s;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.check-input:hover { border-color: #0677CC; }
+
+.check-input:checked {
+  background: linear-gradient(135deg, #00498B, #0677CC);
+  border-color: #00498B;
+}
+
+.check-input:checked::after {
+  content: '✔';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 900;
+}
+
+.voice-select {
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: 12px;
+  border: 2px solid #e0e6ed;
+  background: #f9fafb;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #2c3e50;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+.voice-select:hover, .voice-select:focus { border-color: #0677CC; background: #fff; outline: none; }
+
+.range-input {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 7px;
+  background: #e0e6ed;
+  border-radius: 5px;
+  outline: none;
+  cursor: pointer;
+}
+.range-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px; height: 20px;
+  background: linear-gradient(135deg, #00498B, #0677CC);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 3px 8px rgba(0, 73, 139, 0.5);
+  transition: transform 0.2s;
+}
+.range-input::-webkit-slider-thumb:hover { transform: scale(1.2); }
+.range-input::-moz-range-thumb {
+  width: 20px; height: 20px;
+  background: linear-gradient(135deg, #00498B, #0677CC);
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+
+.test-row { display: flex; gap: 10px; }
+
+.test-voice-btn {
+  flex: 1;
+  padding: 11px;
+  background: linear-gradient(135deg, #f5f7fa, #e0e6ed);
+  color: #00498B;
+  border: 2px solid #e0e6ed;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+.test-voice-btn:hover {
+  background: linear-gradient(135deg, #00498B, #0677CC);
+  color: #fff;
+  border-color: #00498B;
+  transform: translateY(-2px);
+}
+
+.reset-btn {
+  flex: 0 0 auto;
+  padding: 11px 16px;
+  background: #fff;
+  color: #96100E;
+  border: 2px solid #fbd6d5;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+.reset-btn:hover { background: #96100E; color: #fff; border-color: #96100E; transform: translateY(-2px); }
+
+.modal-footer {
+  padding: 16px 24px 22px;
+  display: flex;
+  gap: 12px;
+  border-top: 1px solid #f0f2f5;
+  background: #fafbfc;
+}
+
+.modal-btn {
+  flex: 1;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+
+.modal-btn.cancel { background: #f0f2f5; color: #555; }
+.modal-btn.cancel:hover { background: #e0e6ed; }
+
+.modal-btn.save {
+  background: linear-gradient(135deg, #00498B, #0677CC);
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(0, 73, 139, 0.4);
+}
+.modal-btn.save:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0, 73, 139, 0.6); }
+
+.about-modal { max-width: 520px; }
+
+.about-body {
+  gap: 20px;
+  text-align: center;
+  padding: 28px 26px;
+}
+
+.about-titulo {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #00498B;
+  margin-bottom: 4px;
+}
+
+.about-descricao {
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+.about-secao {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+}
+
+.about-secao-titulo {
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #999;
+  margin-bottom: 2px;
+}
+
+.about-pessoa {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 14px;
+  background: #f9fafb;
+  border: 2px solid #e0e6ed;
+  border-radius: 12px;
+  transition: all 0.25s;
+}
+
+.about-pessoa:hover {
+  background: #fff;
+  border-color: #0677CC;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(6, 119, 204, 0.15);
+}
+
+.about-pessoa-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+.about-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00498B, #0677CC);
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(0, 73, 139, 0.4);
+}
+
+.about-avatar.professor {
+  background: linear-gradient(135deg, #96100E, #d4181a);
+  box-shadow: 0 4px 10px rgba(150, 16, 14, 0.5);
+}
+
+.about-pessoa-nome {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.about-links {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.about-link {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #fff;
+  transition: all 0.25s;
+  cursor: pointer;
+}
+
+.about-link.linkedin {
+  background: linear-gradient(135deg, #0677CC, #00498B);
+  box-shadow: 0 4px 10px rgba(6, 119, 204, 0.35);
+}
+.about-link.linkedin:hover {
+  transform: scale(1.15) rotate(-5deg);
+  box-shadow: 0 6px 16px rgba(6, 119, 204, 0.6);
+}
+
+.about-link.lattes {
+  background: linear-gradient(135deg, #00498B, #002a52);
+  box-shadow: 0 4px 10px rgba(0, 73, 139, 0.35);
+}
+.about-link.lattes:hover {
+  transform: scale(1.15) rotate(5deg);
+  box-shadow: 0 6px 16px rgba(0, 73, 139, 0.6);
+}
+
+.about-rodape {
+  margin-top: 12px;
+  padding-top: 14px;
+  border-top: 1px solid #f0f2f5;
+  font-size: 0.8rem;
+  color: #999;
+  font-weight: 600;
+}
+
+.toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: linear-gradient(135deg, #00498B, #0677CC);
+  color: #fff;
+  padding: 14px 26px;
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  box-shadow: 0 12px 30px rgba(0, 73, 139, 0.5);
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  z-index: 2000;
+  pointer-events: none;
+}
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+.confetti {
+  position: fixed;
+  width: 12px;
+  height: 12px;
+  top: -20px;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(110vh) rotate(1080deg);
+    opacity: 0;
+  }
+}
+
+.hidden { display: none; }
+
+@media (max-width: 900px) {
+  .page-wrapper { gap: 25px; }
+  .brand-logo { max-width: 380px; }
+}
+
+@media (max-width: 600px) {
+  body { padding: 16px 12px; }
+  .page-wrapper { min-height: auto; gap: 20px; }
+  .quiz-container { padding: 22px; }
+  .question-text { font-size: 1.1rem; }
+  .option { font-size: 0.95rem; padding: 14px 16px; }
+  .btn-group { flex-direction: column; }
+  .modal-footer { flex-direction: column; }
+  .result-score { font-size: 2.8rem; }
+  .brand-logo { max-width: 85vw; }
+  .about-pessoa { flex-wrap: wrap; }
+  .timer-bar { height: 8px; }
+  .timer-label { font-size: 0.75rem; margin-bottom: 14px; }
+}
+

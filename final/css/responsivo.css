@@ -1,0 +1,21 @@
+/* Media queries — carregado por último para sobrescrever */
+
+@media (max-width: 900px) {
+  .page-wrapper { gap: 25px; }
+  .brand-logo { max-width: 380px; }
+}
+
+@media (max-width: 600px) {
+  body { padding: 16px 12px; }
+  .page-wrapper { min-height: auto; gap: 20px; }
+  .quiz-container { padding: 22px; }
+  .question-text { font-size: 1.1rem; }
+  .option { font-size: 0.95rem; padding: 14px 16px; }
+  .btn-group { flex-direction: column; }
+  .modal-footer { flex-direction: column; }
+  .result-score { font-size: 2.8rem; }
+  .brand-logo { max-width: 85vw; }
+  .about-pessoa { flex-wrap: wrap; }
+  .timer-bar { height: 8px; }
+  .timer-label { font-size: 0.75rem; margin-bottom: 14px; }
+}
