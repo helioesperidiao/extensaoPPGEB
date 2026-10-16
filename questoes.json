@@ -1,12 +1,13 @@
 {
   "questions": [
     {
-      "question": "Meu cachorro tem vermes. Que doença ele pode transmitir para mim?",
+      "question": "Quando meu cachorro tem vermes, qual doença ele pode transmitir para mim?",
       "options": [
         "Sarna",
         "Bicho geográfico"
       ],
-      "correct": 1
+      "correct": 1,
+      "explanation": "A sarna é transmitida por cachorros e gatos com sarna, não por vermes."
     },
     {
       "question": "Estou com muita coceira no corpo todo. Meu cachorro também. Que doença pode ser?",
@@ -14,7 +15,8 @@
         "Sarna",
         "Verme intestinal"
       ],
-      "correct": 0
+      "correct": 0,
+      "explanation": "Os sintomas de verme intestinal não incluem coceira no corpo todo."
     },
     {
       "question": "Vermes intestinais de cachorros podem causar, em pessoas:",
@@ -23,7 +25,8 @@
         "Bicho geográfico",
         "Infestação das vísceras com suas larvas"
       ],
-      "correct": 2
+      "correct": [1, 2],
+      "explanation": "Vermes intestinais de cachorro não passam para o intestino das pessoas; eles vão para outros lugares do corpo."
     },
     {
       "question": "Pulga pode transmitir verme para o cachorro e para mim?",
@@ -31,7 +34,8 @@
         "Só se engolir a pulga",
         "Sim, pela picada"
       ],
-      "correct": 0
+      "correct": 0,
+      "explanation": "A transmissão do verme da pulga só acontece se você comer a pulga. Por isso é raro em pessoas."
     },
     {
       "question": "Todo cachorro vai transmitir bicho geográfico para mim?",
@@ -39,7 +43,8 @@
         "Só se estiver com vermes",
         "Sim! Fuja de todos os cachorros!"
       ],
-      "correct": 0
+      "correct": 0,
+      "explanation": "Continue amando seu cachorrinho. Só precisa vermifugar e recolher o cocô do chão!"
     },
     {
       "question": "Meu cachorro pode passar diarreia para mim?",
@@ -48,7 +53,8 @@
         "Sim, se ele estiver com vermes",
         "Não"
       ],
-      "correct": 0
+      "correct": 0,
+      "explanation": "A diarreia causada por vermes não passa para as pessoas. Cachorros podem passar diarreia para as pessoas se tiverem protozoários no seu intestino."
     },
     {
       "question": "Como posso evitar de pegar doenças dos meus cachorros e gatos? (Marque TODAS as corretas)",
@@ -59,7 +65,8 @@
         "Bebendo água tratada",
         "Doando meus animaizinhos e ficando longe de qualquer tipo de bicho"
       ],
-      "correct": [0, 1, 2, 3]
+      "correct": [0, 1, 2, 3],
+      "explanation": "Seu bichinho traz amor e alegria! Cuide bem dele, recolha o cocô, lave a mão depois de brincar com ele e sejam muito felizes juntos!"
     },
     {
       "question": "Preciso doar todos os meus animais para ficar seguro?",
@@ -67,7 +74,8 @@
         "Sim, o quanto antes!",
         "Não! Dê vermífugo para seus bichinhos, recolha o cocô, lave sempre as mãos após brincar e seja feliz!"
       ],
-      "correct": 1
+      "correct": 1,
+      "explanation": "Seu bichinho traz amor e alegria! Cuide bem dele, recolha o cocô, lave a mão depois de brincar com ele e sejam muito felizes juntos!"
     }
   ]
 }

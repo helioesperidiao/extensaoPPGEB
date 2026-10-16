@@ -8,7 +8,6 @@ function listarVozes() {
   // Filtra APENAS português
   const vozesPT = todasVozes.filter(v => v.lang.toLowerCase().startsWith('pt'));
 
-  // Se não achou nenhuma voz PT, avisa e mantém vazio
   if (vozesPT.length === 0) {
     console.warn('[voz] Nenhuma voz em português encontrada neste navegador.');
     Estado.vozesDisponiveis = [];
@@ -51,7 +50,6 @@ function selecionarVozNoSelect(name, lang) {
   if (!DOM.voiceSelect || Estado.vozesDisponiveis.length === 0) return;
 
   if (!name) {
-    // Sem voz salva — pega a primeira pt-BR, ou a primeira da lista
     const idx = Estado.vozesDisponiveis.findIndex(v => v.lang.toLowerCase() === 'pt-br');
     DOM.voiceSelect.selectedIndex = idx >= 0 ? idx : 0;
     return;

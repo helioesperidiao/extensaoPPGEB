@@ -18,4 +18,5 @@
   .about-pessoa { flex-wrap: wrap; }
   .timer-bar { height: 8px; }
   .timer-label { font-size: 0.75rem; margin-bottom: 14px; }
+  .question-image { max-height: 200px; }
 }

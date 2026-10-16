@@ -42,6 +42,12 @@
         <div class="timer-label" id="timerLabel">⏱️ 30s</div>
 
         <div id="quizContent">
+
+          <!-- 🆕 IMAGEM DO ENUNCIADO -->
+          <div id="questionImageWrap" class="question-image-wrap hidden">
+            <img id="questionImage" class="question-image" alt="Imagem do enunciado">
+          </div>
+
           <div class="question-box">
             <div class="question-text" id="questionText"></div>
             <button class="speak-btn" id="speakBtn" title="Ouvir pergunta">🔊</button>
@@ -138,6 +144,11 @@
   </div>
 
   <div class="toast" id="toast">✓ Configurações salvas!</div>
+
+  <!-- 🆕 Lightbox da imagem -->
+  <div class="image-lightbox" id="imageLightbox">
+    <img id="imageLightboxImg" src="" alt="">
+  </div>
 
   <!-- JS — ordem importa -->
   <script src="js/config.js"></script>

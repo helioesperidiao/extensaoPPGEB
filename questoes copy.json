@@ -1,0 +1,73 @@
+{
+  "questions": [
+    {
+      "question": "Meu cachorro tem vermes. Que doença ele pode transmitir para mim?",
+      "options": [
+        "Sarna",
+        "Bicho geográfico"
+      ],
+      "correct": 1
+    },
+    {
+      "question": "Estou com muita coceira no corpo todo. Meu cachorro também. Que doença pode ser?",
+      "options": [
+        "Sarna",
+        "Verme intestinal"
+      ],
+      "correct": 0
+    },
+    {
+      "question": "Vermes intestinais de cachorros podem causar, em pessoas:",
+      "options": [
+        "Apenas diarreia, pois ficam no intestino",
+        "Bicho geográfico",
+        "Infestação das vísceras com suas larvas"
+      ],
+      "correct": 2
+    },
+    {
+      "question": "Pulga pode transmitir verme para o cachorro e para mim?",
+      "options": [
+        "Só se engolir a pulga",
+        "Sim, pela picada"
+      ],
+      "correct": 0
+    },
+    {
+      "question": "Todo cachorro vai transmitir bicho geográfico para mim?",
+      "options": [
+        "Só se estiver com vermes",
+        "Sim! Fuja de todos os cachorros!"
+      ],
+      "correct": 0
+    },
+    {
+      "question": "Meu cachorro pode passar diarreia para mim?",
+      "options": [
+        "Sim, se ele estiver com protozoários causadores de diarreia",
+        "Sim, se ele estiver com vermes",
+        "Não"
+      ],
+      "correct": 0
+    },
+    {
+      "question": "Como posso evitar de pegar doenças dos meus cachorros e gatos? (Marque TODAS as corretas)",
+      "options": [
+        "Recolhendo o cocô do chão diariamente",
+        "Vermifugando meu cachorro e meu gato",
+        "Evitando andar descalço na terra/areia",
+        "Bebendo água tratada",
+        "Doando meus animaizinhos e ficando longe de qualquer tipo de bicho"
+      ],
+      "correct": [0, 1, 2, 3]
+    },
+    {
+      "question": "Preciso doar todos os meus animais para ficar seguro?",
+      "options": [
+        "Sim, o quanto antes!",
+        "Não! Dê vermífugo para seus bichinhos, recolha o cocô, lave sempre as mãos após brincar e seja feliz!"
+      ],
+      "correct": 1
+    }
+  ]
+}

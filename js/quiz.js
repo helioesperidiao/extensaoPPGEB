@@ -1,5 +1,38 @@
 // ============ LÓGICA DO QUIZ ============
 
+// 🆕 Renderiza a imagem do enunciado (sequencial por índice)
+function renderizarImagemEnunciado(index) {
+  const wrap = DOM.questionImageWrap;
+  const img = DOM.questionImage;
+  if (!wrap || !img) return;
+
+  const src = getImagemQuestao(index);
+
+  // Reinicia o elemento
+  img.onerror = null;
+  img.removeAttribute('src');
+  img.alt = `Imagem da pergunta ${index + 1}`;
+
+  // Esconde e reaproveita estado limpo
+  wrap.classList.add('hidden');
+
+  // Fallback: se a imagem não existir, mantém escondido sem quebrar o quiz
+  img.onerror = () => {
+    console.warn('[quiz] Imagem não encontrada:', src);
+    wrap.classList.add('hidden');
+  };
+
+  img.onload = () => {
+    wrap.classList.remove('hidden');
+    // Reinicia animação
+    wrap.style.animation = 'none';
+    void wrap.offsetWidth;
+    wrap.style.animation = '';
+  };
+
+  img.src = src;
+}
+
 function loadQuestion() {
   console.log('[DEBUG] loadQuestion — currentIndex:', Estado.currentIndex);
 
@@ -13,6 +46,9 @@ function loadQuestion() {
 
   const q = Estado.quizData.questions[Estado.currentIndex];
   const multi = isMultiResposta(q);
+
+  // 🆕 Imagem do enunciado (sequencial)
+  renderizarImagemEnunciado(Estado.currentIndex);
 
   if (DOM.questionText) {
     DOM.questionText.textContent = q.question;
@@ -135,7 +171,7 @@ function confirmarResposta() {
 
   const acertou = conjuntosIguais(Estado.selectedIndexes, corretos);
 
-  // Marca TODAS as corretas em verde (independente de acerto/erro)
+  // Marca TODAS as corretas em verde
   corretos.forEach(i => {
     if (!allOptions[i]) return;
     allOptions[i].classList.add('correct');
@@ -170,7 +206,6 @@ function confirmarResposta() {
   } else {
     Estado.combo = 0;
 
-    // Marca em vermelho apenas as erradas que o usuário escolheu
     Estado.selectedIndexes.forEach(i => {
       if (corretos.includes(i)) return;
       if (!allOptions[i]) return;
@@ -197,11 +232,9 @@ function confirmarResposta() {
       `${((Estado.currentIndex + 1) / Estado.quizData.questions.length) * 100}%`;
   }
 
-  // Esconde confirmar
   btnConfirm.style.display = 'none';
   btnConfirm.disabled = true;
 
-  // Mostra próxima
   btnNext.textContent = Estado.currentIndex === Estado.quizData.questions.length - 1
     ? 'Ver Resultado 🏁'
     : 'Próxima ➜';
@@ -233,6 +266,8 @@ function showResult() {
   if (DOM.quizContent) DOM.quizContent.classList.add('hidden');
   if (DOM.resultScreen) DOM.resultScreen.classList.remove('hidden');
   if (DOM.multiHint) DOM.multiHint.classList.add('hidden');
+  // 🆕 Esconde a imagem também
+  if (DOM.questionImageWrap) DOM.questionImageWrap.classList.add('hidden');
 
   const total = Estado.quizData.questions.length;
   const percent = (Estado.score / total) * 100;
@@ -298,11 +333,44 @@ function reiniciarQuiz() {
   loadQuestion();
 }
 
+// ============ 🆕 LIGHTBOX DA IMAGEM ============
+function configurarLightboxImagem() {
+  const img = DOM.questionImage;
+  const lightbox = DOM.imageLightbox;
+  const lightboxImg = DOM.imageLightboxImg;
+
+  if (img && lightbox && lightboxImg) {
+    img.addEventListener('click', () => {
+      if (!img.src) return;
+      lightboxImg.src = img.src;
+      lightboxImg.alt = img.alt;
+      lightbox.classList.add('show');
+      somClique();
+    });
+
+    lightbox.addEventListener('click', () => {
+      lightbox.classList.remove('show');
+      lightboxImg.src = '';
+    });
+  }
+
+  // ESC fecha o lightbox
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && lightbox && lightbox.classList.contains('show')) {
+      lightbox.classList.remove('show');
+      lightboxImg.src = '';
+    }
+  });
+}
+
 // ============ EVENTOS ============
 function configurarEventosQuiz() {
   if (DOM.confirmBtn) DOM.confirmBtn.addEventListener('click', confirmarResposta);
   if (DOM.nextBtn) DOM.nextBtn.addEventListener('click', irParaProxima);
   if (DOM.restartBtn) DOM.restartBtn.addEventListener('click', reiniciarQuiz);
+
+  // 🆕 Lightbox
+  configurarLightboxImagem();
 
   // Botão de som
   if (DOM.soundBtn) {

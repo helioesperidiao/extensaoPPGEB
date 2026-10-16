@@ -7,7 +7,7 @@ const Estado = {
   currentIndex: 0,
   score: 0,
   answered: false,
-  selectedIndexes: [],   // ← era selectedIndex: null (agora é array, suporta múltiplas)
+  selectedIndexes: [],   // suporta múltiplas respostas
   combo: 0,
   somAtivado: true,
   vozesDisponiveis: [],
@@ -34,6 +34,11 @@ let configTemp = { ...configAtiva };
 const STORAGE_KEY = 'quizVoiceConfig';
 const STORAGE_SOM = 'quizSomAtivado';
 
+// 🆕 Caminho e extensão das imagens do enunciado
+const IMG_DIR = 'img/';
+const IMG_EXT = '.png';
+const IMG_PREFIX = 'image';
+
 // ============ ATALHOS PARA ELEMENTOS DO DOM ============
 const $ = (id) => document.getElementById(id);
 
@@ -53,6 +58,12 @@ const DOM = {
   resultScreen: $('resultScreen'),
   quizContainer: $('quizContainer'),
   multiHint: $('multiHint'),
+
+  // 🆕 Imagem do enunciado
+  questionImageWrap: $('questionImageWrap'),
+  questionImage: $('questionImage'),
+  imageLightbox: $('imageLightbox'),
+  imageLightboxImg: $('imageLightboxImg'),
 
   // Timer
   timerBar: $('timerBar'),
@@ -117,4 +128,11 @@ function conjuntosIguais(a, b) {
   const sa = a.slice().sort();
   const sb = b.slice().sort();
   return sa.every((v, i) => v === sb[i]);
+}
+
+// ============ 🆕 HELPER DE IMAGEM ============
+// Retorna o caminho da imagem baseado no índice (1-based) da questão
+// Ex: índice 0 → "img/image1.png"
+function getImagemQuestao(index) {
+  return `${IMG_DIR}${IMG_PREFIX}${index + 1}${IMG_EXT}`;
 }
