@@ -80,4 +80,3 @@ O arquivo `sobre.json` fornece os dados exibidos na janela “Sobre”: título,
 
 - A disponibilidade de vozes em português depende do navegador e das vozes instaladas no dispositivo.
 - As preferências de som e configuração ficam no `localStorage` do navegador e podem ser diferentes em cada dispositivo ou navegador.
-- `context.py` é um utilitário opcional para gerar `conteudo_projeto.txt` com a árvore e o conteúdo dos arquivos do projeto.
